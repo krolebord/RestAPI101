@@ -1,0 +1,13 @@
+﻿# Default ignored files
+/shelf/
+/workspace.xml
+# Rider ignored files
+/contentModel.xml
+/modules.xml
+/projectSettingsUpdater.xml
+/.idea.RestAPI101.iml
+# Datasource local storage ignored files
+/../../../../../../../:\Projects\FullStack\RestAPI101\.idea\.idea.RestAPI101\.idea/dataSources/
+/dataSources.local.xml
+# Editor-based HTTP Client requests
+/httpRequests/
