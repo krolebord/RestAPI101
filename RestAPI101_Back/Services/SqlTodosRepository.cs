@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using RestAPI101_Back.Models;
 
-namespace RestAPI101_Back.Data {
+namespace RestAPI101_Back.Services {
     public class SqlTodosRepository : ITodosRepository {
         private readonly TodosContext context;
 

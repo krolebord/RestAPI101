@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using RestAPI101_Back.Models;
 
-namespace RestAPI101_Back.Data {
+namespace RestAPI101_Back.Services {
     public class TodosContext : DbContext {
         private IConfiguration configuration;
         

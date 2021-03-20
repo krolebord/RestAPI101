@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using RestAPI101_Back.Models;
 
-namespace RestAPI101_Back.Data {
+namespace RestAPI101_Back.Services {
     public interface ITodosRepository {
         bool SaveChanges();
         

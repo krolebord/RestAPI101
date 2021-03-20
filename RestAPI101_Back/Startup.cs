@@ -1,11 +1,12 @@
 using System;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Serialization;
-using RestAPI101_Back.Data;
+using RestAPI101_Back.Services;
 
 namespace RestAPI101_Back {
     public class Startup {
@@ -21,12 +22,16 @@ namespace RestAPI101_Back {
 
         public void ConfigureServices(IServiceCollection services) {
             services.AddSingleton(Configuration);
-            
+
             services.AddDbContext<TodosContext>();
 
             services.AddScoped<ITodosRepository, SqlTodosRepository>();
             
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            AuthOptions authOptions = new AuthOptions(Configuration);
+            services.AddSingleton(authOptions);
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).Configure(authOptions);
 
             services.AddControllers()
                 .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
@@ -41,9 +46,10 @@ namespace RestAPI101_Back {
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            app.UseEndpoints(endpoints =>  endpoints.MapControllers());
         }
     }
 }

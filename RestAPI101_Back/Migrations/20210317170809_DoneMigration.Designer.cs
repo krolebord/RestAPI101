@@ -4,7 +4,8 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using RestAPI101_Back.Data;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+using RestAPI101_Back.Services;
 
 namespace RestAPI101_Back.Migrations
 {

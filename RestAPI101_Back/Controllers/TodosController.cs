@@ -1,15 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using RestAPI101_Back.Data;
 using RestAPI101_Back.DTOs;
 using RestAPI101_Back.Models;
+using RestAPI101_Back.Services;
 
 namespace RestAPI101_Back.Controllers {
     [ApiController] 
     [Route("api/todos")]
+    [Authorize]
     public class TodosController : ControllerBase {
         private readonly ITodosRepository todosRepository;
         private IMapper mapper;
@@ -45,7 +48,7 @@ namespace RestAPI101_Back.Controllers {
             todosRepository.CreateTodo(todo);
             
             if (!todosRepository.SaveChanges())
-                return StatusCode(507);
+                return StatusCode(StatusCodes.Status500InternalServerError);
 
             var commandReadDto = mapper.Map<Todo, TodoReadDTO>(todo);
             
