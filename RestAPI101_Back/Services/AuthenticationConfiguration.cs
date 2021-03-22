@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Text;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,15 +12,14 @@ namespace RestAPI101_Back.Services {
                 options.TokenValidationParameters = new TokenValidationParameters {
                     ValidateActor = false,
                     ValidateIssuer = false,
+                    ValidateAudience = false,
 
-                    ValidateAudience = true,
-                    ValidAudience = authOptions.Audience,
-                    
                     RequireExpirationTime = true,
                     ValidateLifetime = true,
-                    
+
                     IssuerSigningKey = authOptions.GetSymmetricSecurityKey(),
-                    ValidateIssuerSigningKey = true
+                    ValidateIssuerSigningKey = true,
+
                 };
             });
         }

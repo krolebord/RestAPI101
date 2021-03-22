@@ -5,21 +5,19 @@ using RestAPI101_Back.Models;
 
 namespace RestAPI101_Back.Services {
     public class SqlTodosRepository : ITodosRepository {
-        private readonly TodosContext context;
+        private readonly RestAppContext context;
 
-        public SqlTodosRepository(TodosContext context) {
+        public SqlTodosRepository(RestAppContext context) {
             this.context = context;
         }
 
-        public bool SaveChanges() {
-            return context.SaveChanges() >= 0;
-        }
+        public bool SaveChanges() => context.SaveChanges() >= 0;
 
         public IEnumerable<Todo> GetAllTodos() {
             return context.Todos.ToList();
         }
 
-        public Todo GetTodoById(long id) {
+        public Todo GetTodoById(int id) {
             return context.Todos.Find(id);
         }
 

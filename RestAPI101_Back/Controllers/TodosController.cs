@@ -11,11 +11,11 @@ using RestAPI101_Back.Services;
 
 namespace RestAPI101_Back.Controllers {
     [ApiController] 
-    [Route("api/todos")]
+    [Route(APIRoutes.TodosController)]
     [Authorize]
     public class TodosController : ControllerBase {
         private readonly ITodosRepository todosRepository;
-        private IMapper mapper;
+        private readonly IMapper mapper;
         
         public TodosController(ITodosRepository todosRepository, IMapper mapper) {
             this.todosRepository = todosRepository;
@@ -23,7 +23,7 @@ namespace RestAPI101_Back.Controllers {
         }
         
         // GET api/todos/
-        [HttpGet] 
+        [HttpGet(APIRoutes.Todos.GetAll)]
         public ActionResult<IEnumerable<TodoReadDTO>> GetAllTodos() {
             var todos = todosRepository.GetAllTodos();
 
@@ -33,16 +33,16 @@ namespace RestAPI101_Back.Controllers {
         }
 
         // GET api/todos/{id}
-        [HttpGet("{id}", Name = nameof(GetTodoById))] 
-        public ActionResult<TodoReadDTO> GetTodoById(long id) {
+        [HttpGet(APIRoutes.Todos.GetSpecified, Name = nameof(GetTodoById))] 
+        public ActionResult<TodoReadDTO> GetTodoById(int id) {
             var item = todosRepository.GetTodoById(id);
             if(item != null)
                 return Ok(mapper.Map<Todo, TodoReadDTO>(item));
             return NotFound();
         }
-        
+
         // POST api/todos/
-        [HttpPost]
+        [HttpPost(APIRoutes.Todos.Create)]
         public ActionResult<TodoReadDTO> CreateTodo(TodoCreateDTO todoCreateDto) {
             var todo = mapper.Map<TodoCreateDTO, Todo>(todoCreateDto);
             todosRepository.CreateTodo(todo);
@@ -56,8 +56,8 @@ namespace RestAPI101_Back.Controllers {
         }
         
         // PUT api/todos/{id}
-        [HttpPut("{id}")]
-        public ActionResult UpdateTodo(long id, TodoUpdateDTO todoUpdateDto) {
+        [HttpPut(APIRoutes.Todos.Update)]
+        public ActionResult UpdateTodo(int id, TodoUpdateDTO todoUpdateDto) {
             var todo = todosRepository.GetTodoById(id);
 
             if (todo == null)
@@ -71,8 +71,8 @@ namespace RestAPI101_Back.Controllers {
         }
         
         // PATCH api/todos/{id}
-        [HttpPatch("{id}")]
-        public ActionResult PartialUpdateTodo(long id, JsonPatchDocument<TodoUpdateDTO> patch) {
+        [HttpPatch(APIRoutes.Todos.PartialUpdate)]
+        public ActionResult PartialUpdateTodo(int id, JsonPatchDocument<TodoUpdateDTO> patch) {
             var todo = todosRepository.GetTodoById(id);
 
             if (todo == null)
@@ -90,8 +90,8 @@ namespace RestAPI101_Back.Controllers {
         }
 
         // DELETE api/todos/{id}
-        [HttpDelete("{id}")]
-        public ActionResult<TodoReadDTO> DeleteTodo(long id) {
+        [HttpDelete(APIRoutes.Todos.Delete)]
+        public ActionResult<TodoReadDTO> DeleteTodo(int id) {
             var todo = todosRepository.GetTodoById(id);
 
             if (todo == null)

@@ -1,38 +1,39 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
+using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using RestAPI101_Back.DTOs;
 using RestAPI101_Back.Models;
 using RestAPI101_Back.Services;
 
 namespace RestAPI101_Back.Controllers {
     [ApiController]
-    [Route("api/auth")]
+    [Route(APIRoutes.AuthController)]
     public class AuthenticationController : ControllerBase {
-        private AuthOptions authOptions;
+        private readonly AuthOptions authOptions;
+        private readonly IUsersRepository usersRepository;
+        private readonly IMapper mapper;
 
-        public AuthenticationController(AuthOptions authOptions) {
+        public AuthenticationController(AuthOptions authOptions, IUsersRepository usersRepository, IMapper mapper) {
             this.authOptions = authOptions;
+            this.usersRepository = usersRepository;
+            this.mapper = mapper;
         }
-        
-        private static readonly List<User> users = new List<User> {
-            new User { Login = "user_a", Password = "password_a" },
-            new User { Login = "user_b", Password = "password_b"}
-        };
 
-        [HttpPost("login")]
-        public ActionResult Login(string login, string password) {
-            var identity = GetIdentity(login, password);
+        [HttpPost(APIRoutes.Auth.Login)]
+        public ActionResult<UserReadDTO> Login(UserLoginDTO userLogin) {
+            if (!ModelState.IsValid) return BadRequest();
+            
+            var identity = GetIdentity(userLogin);
 
             if (identity == null)
-                return BadRequest(new { errorText = "Invalid login or password"});
+                return BadRequest(new { errorText = $"Invalid login or password ({userLogin.Login} : {userLogin.Password})"});
 
             var now = DateTime.UtcNow;
             var jwt = new JwtSecurityToken(
-                audience: authOptions.Audience,
                 notBefore: now,
                 claims: identity.Claims,
                 expires: now.Add(TimeSpan.FromMinutes(authOptions.Lifetime)),
@@ -40,18 +41,31 @@ namespace RestAPI101_Back.Controllers {
             );
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
 
-            var response = new {
-                access_token = encodedJwt,
-                login = identity.Name
+            UserReadDTO response = new() {
+                Login = identity.Name,
+                Token = encodedJwt
             };
 
             return Ok(response);
         }
 
-        private ClaimsIdentity GetIdentity(string login, string password) {
-            var user = users.FirstOrDefault(x => x.Login == login && x.Password == password);
+        [HttpPost(APIRoutes.Auth.Register)]
+        public ActionResult<UserReadDTO> Register(UserRegisterDTO userRegister) {
+            if (!ModelState.IsValid) return BadRequest();
+
+            User user = mapper.Map<UserRegisterDTO, User>(userRegister);
+
+            if (!usersRepository.RegisterUser(user))
+                return BadRequest("Login already occupied");
+
+            usersRepository.SaveChanges();
+            return Login(mapper.Map<UserRegisterDTO, UserLoginDTO>(userRegister));
+        }
+
+        private ClaimsIdentity GetIdentity(UserLoginDTO userLogin) {
+            var user = usersRepository.GetUserByLogin(userLogin.Login);
             
-            if (user == null) return null;
+            if (user == null || user.Password != userLogin.Password) return null;
             
             return new ClaimsIdentity(
                 new Claim[] {new(ClaimsIdentity.DefaultNameClaimType, user.Login)},
