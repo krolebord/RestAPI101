@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
 using RestAPI101_Back.Profiles;
 using RestAPI101_Back.Services;
@@ -37,11 +38,20 @@ namespace RestAPI101_Back {
 
             services.AddControllers()
                 .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
+
+            services.AddSwaggerGen(options => {
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "RestAPI101_Back", Version = "v1"});
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
+
+                app.UseSwagger();
+                app.UseSwaggerUI(options => {
+                    options.SwaggerEndpoint("/swagger/v1/swagger.json", "RestAPI101_Back v1");
+                });
             }
 
             app.UseHttpsRedirection();
