@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using RestAPI101_Back.Models;
 
 namespace RestAPI101_Back.Services {
@@ -8,6 +9,8 @@ namespace RestAPI101_Back.Services {
 
         public UsersRepository(RestAppContext context) {
             this.context = context;
+
+            context.Users.Include(user => user.Todos).Load();
         }
 
         public bool SaveChanges() => context.SaveChanges() >= 0;

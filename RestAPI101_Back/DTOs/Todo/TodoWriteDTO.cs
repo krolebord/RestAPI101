@@ -6,5 +6,6 @@ namespace RestAPI101_Back.DTOs {
         [Required]
         public string Title { get; set; }
         public string Description { get; set; }
+        public bool Done { get; set; } = false;
     }
 }

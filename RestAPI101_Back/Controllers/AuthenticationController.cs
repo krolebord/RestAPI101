@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using RestAPI101_Back.DTOs;
+using RestAPI101_Back.Filters;
 using RestAPI101_Back.Models;
 using RestAPI101_Back.Services;
 
@@ -30,7 +31,7 @@ namespace RestAPI101_Back.Controllers {
             var identity = GetIdentity(userLogin);
 
             if (identity == null)
-                return BadRequest(new { errorText = $"Invalid login or password ({userLogin.Login} : {userLogin.Password})"});
+                return BadRequest(new { errorText = $"Invalid login or password"});
 
             var now = DateTime.UtcNow;
             var jwt = new JwtSecurityToken(

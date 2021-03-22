@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using RestAPI101_Back.Models;
 
 namespace RestAPI101_Back.Services {
@@ -13,17 +13,11 @@ namespace RestAPI101_Back.Services {
 
         public bool SaveChanges() => context.SaveChanges() >= 0;
 
-        public IEnumerable<Todo> GetAllTodos() {
-            return context.Todos.ToList();
-        }
-
-        public Todo GetTodoById(int id) {
-            return context.Todos.Find(id);
-        }
-
         public void CreateTodo(Todo todo) {
             if(string.IsNullOrWhiteSpace(todo.Title))
                 throw new ArgumentNullException(nameof(todo.Title));
+            if(todo.User == null)
+                throw new ArgumentNullException(nameof(todo.User));
 
             context.Todos.Add(todo);
         }

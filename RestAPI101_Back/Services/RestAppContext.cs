@@ -20,8 +20,11 @@ namespace RestAPI101_Back.Services {
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
-            modelBuilder.Entity<User>()
-                .HasAlternateKey(user => user.Login);
+            var userBuilder = modelBuilder.Entity<User>();
+            userBuilder.HasMany(user => user.Todos)
+                .WithOne(todo => todo.User)
+                .OnDelete(DeleteBehavior.Cascade);
+            userBuilder.HasAlternateKey(user => user.Login);
             
             modelBuilder.Entity<Todo>()
                 .HasOne(todo => todo.User)

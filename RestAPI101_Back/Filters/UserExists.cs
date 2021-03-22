@@ -1,8 +1,9 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using RestAPI101_Back.Services;
 
-namespace RestAPI101_Back.Services {
+namespace RestAPI101_Back.Filters {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, Inherited = true)]
     public class UserExists : Attribute, IAuthorizationFilter { //IActionFilter {
         private readonly IUsersRepository usersRepository;

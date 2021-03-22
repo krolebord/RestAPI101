@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using RestAPI101_Back.Services;
@@ -9,9 +10,10 @@ using RestAPI101_Back.Services;
 namespace RestAPI101_Back.Migrations
 {
     [DbContext(typeof(RestAppContext))]
-    partial class RestAppContextModelSnapshot : ModelSnapshot
+    [Migration("20210322193525_UsersUpdate")]
+    partial class UsersUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
