@@ -13,6 +13,7 @@ namespace RestAPI101_Back.Controllers {
     [ApiController] 
     [Route(APIRoutes.TodosController)]
     [Authorize]
+    [TypeFilter(typeof(UserExists))]
     public class TodosController : ControllerBase {
         private readonly ITodosRepository todosRepository;
         private readonly IMapper mapper;

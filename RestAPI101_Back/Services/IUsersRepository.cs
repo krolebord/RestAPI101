@@ -6,6 +6,7 @@ namespace RestAPI101_Back.Services {
 
         public User GetUserById(int id);
         public User GetUserByLogin(string login);
+        public bool LoginOccupied(string login);
 
         public bool RegisterUser(User user);
         

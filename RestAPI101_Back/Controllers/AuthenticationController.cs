@@ -2,7 +2,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using AutoMapper;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using RestAPI101_Back.DTOs;
@@ -62,6 +62,19 @@ namespace RestAPI101_Back.Controllers {
             return Login(mapper.Map<UserRegisterDTO, UserLoginDTO>(userRegister));
         }
 
+        [HttpDelete(APIRoutes.Auth.Delete)]
+        [Authorize]
+        [TypeFilter(typeof(UserExists))]
+        public ActionResult Delete() {
+            var user = usersRepository.GetUserByLogin(User.Identity!.Name);
+            if (user == null)
+                return Forbid();
+            
+            usersRepository.DeleteUser(user);
+            usersRepository.SaveChanges();
+            return Ok();
+        }
+        
         private ClaimsIdentity GetIdentity(UserLoginDTO userLogin) {
             var user = usersRepository.GetUserByLogin(userLogin.Login);
             

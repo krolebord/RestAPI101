@@ -20,13 +20,17 @@ namespace RestAPI101_Back.Services {
             return context.Users.FirstOrDefault(user => user.Login == login);
         }
 
+        public bool LoginOccupied(string login) {
+            return context.Users.Any(user => user.Login == login);
+        }
+
         public bool RegisterUser(User user) {
             if (string.IsNullOrWhiteSpace(user.Login))
                 throw new ArgumentNullException(nameof(user.Login));
             if (string.IsNullOrWhiteSpace(user.Password))
                 throw new ArgumentNullException(nameof(user.Password));
 
-            if (context.Users.Any(dbUser => dbUser.Login == user.Login))
+            if (LoginOccupied(user.Login))
                 return false;
 
             context.Users.Add(user);
