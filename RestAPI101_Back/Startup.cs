@@ -36,6 +36,8 @@ namespace RestAPI101_Back {
             services.AddSingleton(authOptions);
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).Configure(authOptions);
 
+            services.AddCors();
+            
             services.AddControllers()
                 .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
 
@@ -54,10 +56,12 @@ namespace RestAPI101_Back {
                 });
             }
 
-            app.UseHttpsRedirection();
-
             app.UseRouting();
 
+            app.UseCors(builder => {
+                builder.AllowAnyOrigin().AllowAnyHeader();
+            });
+            
             app.UseAuthentication();
             app.UseAuthorization();
 
