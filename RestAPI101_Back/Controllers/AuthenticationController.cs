@@ -3,6 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using RestAPI101_Back.DTOs;
@@ -25,6 +26,8 @@ namespace RestAPI101_Back.Controllers {
         }
 
         [HttpPost(APIRoutes.Auth.Login)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<UserReadDTO> Login(UserLoginDTO userLogin) {
             if (!ModelState.IsValid) return BadRequest();
             
@@ -33,18 +36,20 @@ namespace RestAPI101_Back.Controllers {
             if (identity == null)
                 return BadRequest(new { errorText = $"Invalid login or password"});
 
-            var now = DateTime.UtcNow;
+            var now = DateTime.Now;
+            var tokeExpires = now.Add(TimeSpan.FromMinutes(authOptions.Lifetime));
             var jwt = new JwtSecurityToken(
                 notBefore: now,
                 claims: identity.Claims,
-                expires: now.Add(TimeSpan.FromMinutes(authOptions.Lifetime)),
+                expires: tokeExpires,
                 signingCredentials: new SigningCredentials(authOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256)
             );
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
 
             UserReadDTO response = new() {
                 Login = identity.Name,
-                Token = encodedJwt
+                Token = encodedJwt,
+                TokenExpires = tokeExpires
             };
 
             return Ok(response);
