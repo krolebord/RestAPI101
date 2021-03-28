@@ -4,10 +4,10 @@ using Microsoft.EntityFrameworkCore;
 using RestAPI101_Back.Models;
 
 namespace RestAPI101_Back.Services {
-    public class SqlTodosRepository : ITodosRepository {
+    public class TodosRepository : ITodosRepository {
         private readonly RestAppContext context;
 
-        public SqlTodosRepository(RestAppContext context) {
+        public TodosRepository(RestAppContext context) {
             this.context = context;
         }
 

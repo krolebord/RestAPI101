@@ -5,7 +5,7 @@ using RestAPI101_Back.Services;
 
 namespace RestAPI101_Back.Filters {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, Inherited = true)]
-    public class UserExists : Attribute, IAuthorizationFilter { //IActionFilter {
+    public class UserExists : Attribute, IAuthorizationFilter {
         private readonly IUsersRepository usersRepository;
 
         public UserExists(IUsersRepository usersRepository) {

@@ -27,7 +27,7 @@ namespace RestAPI101_Back.Services {
             return context.Users.Any(user => user.Login == login);
         }
 
-        public bool RegisterUser(User user) {
+        public bool CreateUser(User user) {
             if (string.IsNullOrWhiteSpace(user.Login))
                 throw new ArgumentNullException(nameof(user.Login));
             if (string.IsNullOrWhiteSpace(user.Password))

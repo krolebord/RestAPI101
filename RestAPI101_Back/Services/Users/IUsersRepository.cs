@@ -8,7 +8,7 @@ namespace RestAPI101_Back.Services {
         public User GetUserByLogin(string login);
         public bool LoginOccupied(string login);
 
-        public bool RegisterUser(User user);
+        public bool CreateUser(User user);
         
         public void DeleteUser(User user);
     }

@@ -9,6 +9,7 @@ namespace RestAPI101_Back.Services {
     public static class AuthenticationConfiguration {
         public static AuthenticationBuilder Configure(this AuthenticationBuilder builder, AuthOptions authOptions) {
             return builder.AddJwtBearer(options => {
+                options.SaveToken = true;
                 options.TokenValidationParameters = new TokenValidationParameters {
                     ValidateActor = false,
                     ValidateIssuer = false,
@@ -19,7 +20,6 @@ namespace RestAPI101_Back.Services {
 
                     IssuerSigningKey = authOptions.GetSymmetricSecurityKey(),
                     ValidateIssuerSigningKey = true,
-
                 };
             });
         }

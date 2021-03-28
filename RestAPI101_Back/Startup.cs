@@ -27,13 +27,22 @@ namespace RestAPI101_Back {
 
             services.AddDbContext<RestAppContext>();
 
-            services.AddScoped<ITodosRepository, SqlTodosRepository>();
+            services.AddScoped<ITodosRepository, TodosRepository>();
             services.AddScoped<IUsersRepository, UsersRepository>();
-            
-            services.AddAutoMapper(typeof(TodosProfile), typeof(UsersProfile));
 
-            AuthOptions authOptions = new AuthOptions(Configuration);
+            services.AddScoped<IUsersService, UsersService>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
+            
+            services.AddAutoMapper(
+                typeof(TodosProfile), 
+                typeof(UsersProfile), 
+                typeof(AuthTokensProfile)
+            );
+
+            AuthOptions authOptions = new(Configuration);
+
             services.AddSingleton(authOptions);
+            
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).Configure(authOptions);
 
             services.AddCors();

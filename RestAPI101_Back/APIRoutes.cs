@@ -5,7 +5,13 @@
         public static class Auth {
             public const string Login = "login";
             public const string Register = "register";
-            public const string Delete = "delete";
+        }
+        
+        // User
+        public const string UserController = "api/user";
+        public static class User {
+            public const string Get = "";
+            public const string Delete = "";
         }
         
         // Todos
