@@ -12,5 +12,8 @@ namespace RestAPI101_Back.DTOs {
         [MinLength(8, ErrorMessage = "Password must be at least 8 characters long")]
         [MaxLength(32, ErrorMessage = "Password must be maximum 32 characters long")]
         public string Password { get; set; }
+        
+        [Required(ErrorMessage = "Username must be specified")]
+        public string Username { get; set; }
     }
 }

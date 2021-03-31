@@ -13,6 +13,9 @@ namespace RestAPI101_Back.Models {
         
         [Required, MinLength(8), MaxLength(32)]
         public string Password { get; set; }
+        
+        [Required]
+        public string Username { get; set; }
 
         public List<Todo> Todos { get; set; } = new ();
     }
