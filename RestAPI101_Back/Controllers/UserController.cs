@@ -12,10 +12,12 @@ namespace RestAPI101_Back.Controllers {
     [TypeFilter(typeof(UserExists))]
     public class UserController : ControllerBase {
         private readonly IUsersRepository usersRepository;
+        private readonly IUsersService usersService;
         private readonly IMapper mapper;
 
-        public UserController(IUsersRepository usersRepository, IMapper mapper) {
+        public UserController(IUsersRepository usersRepository, IUsersService usersService, IMapper mapper) {
             this.usersRepository = usersRepository;
+            this.usersService = usersService;
             this.mapper = mapper;
         }
 
@@ -28,11 +30,15 @@ namespace RestAPI101_Back.Controllers {
             return Ok(userDTO);
         }
 
+        [HttpPost(APIRoutes.User.ChangeName)]
+        public ActionResult ChangeUsername(UserChangeNameDTO username) {
+            usersService.ChangeUsername(User.Identity!.Name, username);
+            return Ok();
+        }
+
         [HttpDelete(APIRoutes.User.Delete)]
         public ActionResult Delete() {
-            var user = usersRepository.GetUserByLogin(User.Identity!.Name);
-            usersRepository.DeleteUser(user);
-            usersRepository.SaveChanges();
+            usersService.DeleteUser(User.Identity!.Name);
             return Ok();
         }
     }

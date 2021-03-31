@@ -25,7 +25,7 @@ namespace RestAPI101_Back.Controllers {
         public ActionResult<AuthTokenReadDTO> Login(UserLoginDTO userLogin) {
             if (!ModelState.IsValid) return BadRequest();
 
-            var response = usersService.GetUserByLogin(userLogin);
+            var response = usersService.Login(userLogin);
             
             if(response is ServiceErrorResponse<User> errorResponse)
                 return BadRequest(new { errorText = errorResponse.errorMessage});

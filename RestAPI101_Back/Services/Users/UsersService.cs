@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using RestAPI101_Back.DTOs;
 using RestAPI101_Back.Models;
 
@@ -12,7 +13,7 @@ namespace RestAPI101_Back.Services {
             this.mapper = mapper;
         }
 
-        public ServiceResponse<User> GetUserByLogin(UserLoginDTO userLogin) {
+        public ServiceResponse<User> Login(UserLoginDTO userLogin) {
             var user = usersRepository.GetUserByLogin(userLogin.Login);
 
             if (user == null)
@@ -39,6 +40,26 @@ namespace RestAPI101_Back.Services {
             usersRepository.SaveChanges();
 
             return new ServiceResponse<User>(user);
+        }
+
+        public void ChangeUsername(string login, UserChangeNameDTO username) {
+            var user = usersRepository.GetUserByLogin(login);
+
+            if (user == null)
+                throw new ArgumentException(nameof(login));
+
+            user.Username = username.Username;
+            usersRepository.SaveChanges();
+        }
+
+        public void DeleteUser(string login) {
+            var user = usersRepository.GetUserByLogin(login);
+
+            if (user == null)
+                throw new ArgumentException(nameof(login));
+            
+            usersRepository.DeleteUser(user);
+            usersRepository.SaveChanges();
         }
     }
 }
