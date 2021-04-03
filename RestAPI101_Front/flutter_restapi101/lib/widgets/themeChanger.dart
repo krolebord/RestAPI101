@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_restapi101/models/DarkModePreference.dart';
 import 'package:flutter_restapi101/widgets/themeProvider.dart';
 
 class ThemeChanger extends StatefulWidget {
