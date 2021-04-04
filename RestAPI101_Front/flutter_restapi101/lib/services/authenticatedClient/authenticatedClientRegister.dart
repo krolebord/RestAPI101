@@ -7,7 +7,7 @@ extension AuthenticatedClientRegister on GetIt {
   void registerAuthenticatedClient() {
     this.registerFactoryAsync<AuthenticatedClient>(
       () async {
-        var authService = get<AuthService>();
+        var authService = this.get<AuthService>();
 
         if(authService.currentUser == null)
           throw AuthServiceError.unauthorized();

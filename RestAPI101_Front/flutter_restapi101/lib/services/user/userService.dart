@@ -3,7 +3,7 @@ import 'package:flutter_restapi101/models/apiUser.dart';
 abstract class UserService {
   ApiUser get currentUser;
 
-  Future<void> initialize();
+  bool get loaded;
 
   Future<void> updateUser();
   

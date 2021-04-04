@@ -1,29 +1,34 @@
+import 'dart:convert';
+import 'package:flutter_restapi101/apiUrls.dart';
 import 'package:flutter_restapi101/models/apiUser.dart';
-import 'package:flutter_restapi101/services/Auth/authService.dart';
-import 'package:flutter_restapi101/services/User/userService.dart';
+import 'package:flutter_restapi101/services/authenticatedClient/authenticatedClient.dart';
+import 'package:flutter_restapi101/services/user/userService.dart';
 import 'package:get_it/get_it.dart';
+import 'package:http/http.dart' as http;
 
 class UserServiceImplementation implements UserService {
-  final AuthService _authService;
-  
+  bool _loaded = false;
   late ApiUser _user;
 
-  UserServiceImplementation() :
-    _authService = GetIt.instance.get<AuthService>();
+  @override
+  bool get loaded => _loaded;
 
   @override
   ApiUser get currentUser => _user;
-  
-  @override
-  Future<void> initialize() {
-    // TODO: implement initialize
-    throw UnimplementedError();
-  }
 
   @override
-  Future<void> updateUser() {
-    // TODO: implement updateUser
-    throw UnimplementedError();
+  Future<void> updateUser() async {
+    var client = await GetIt.instance.getAsync<AuthenticatedClient>();
+
+    var request = http.Request('GET', APIURLs.getUser());
+
+    var streamedResponse = await client.send(request);
+    var response = await http.Response.fromStream(streamedResponse);
+
+    client.close();
+
+    _user = ApiUser.fromJson(json.decode(response.body));
+    _loaded = true;
   }
 
   @override

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_restapi101/widgets/themeChanger.dart';
+import 'package:flutter_restapi101/widgets/themeProvider/themeChanger.dart';
 
 class RestApiAppBar extends StatelessWidget with PreferredSizeWidget {
   @override

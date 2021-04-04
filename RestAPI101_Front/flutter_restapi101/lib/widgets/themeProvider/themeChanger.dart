@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_restapi101/widgets/themeProvider.dart';
+import 'package:flutter_restapi101/widgets/themeProvider/themeProvider.dart';
 
 class ThemeChanger extends StatefulWidget {
   @override

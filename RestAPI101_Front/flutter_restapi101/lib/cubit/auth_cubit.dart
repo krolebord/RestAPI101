@@ -1,8 +1,9 @@
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter_restapi101/models/auth/authCredentials.dart';
 import 'package:flutter_restapi101/models/auth/authRegisterCredentials.dart';
 import 'package:flutter_restapi101/models/auth/authUser.dart';
-import 'package:flutter_restapi101/services/Auth/authService.dart';
+import 'package:flutter_restapi101/services/auth/authService.dart';
 import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';
 

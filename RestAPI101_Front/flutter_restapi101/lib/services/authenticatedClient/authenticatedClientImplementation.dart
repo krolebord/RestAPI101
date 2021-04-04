@@ -13,4 +13,7 @@ class AuthenticatedClientImplementation implements AuthenticatedClient {
     request.headers['Authorization'] = 'Bearer $token';
     return _client.send(request);
   }
+
+  @override
+  void close() => _client.close();
 }

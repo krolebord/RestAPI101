@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_restapi101/cubit/auth_cubit.dart';
 import 'package:flutter_restapi101/cubit/todos_cubit.dart';
 import 'package:flutter_restapi101/cubit/user_cubit.dart';
-import 'package:flutter_restapi101/models/auth/authUser.dart';
+import 'package:flutter_restapi101/widgets/userActions/userActions.dart';
 
 class Authenticated extends StatelessWidget {
   @override
@@ -15,12 +14,11 @@ class Authenticated extends StatelessWidget {
       ], 
       child: Scaffold(
         appBar: AppBar(
-          title: Text(context.read<AuthUser>().credentials.login),
+          leading: Icon(Icons.api),
+          title: Text("Rest API 101"),
           actions: [
-            IconButton(
-              icon: Icon(Icons.logout),
-              onPressed: () => context.read<AuthCubit>().logout()
-            )
+            UserActions(),
+            SizedBox(width: 16)
           ],
         ),
       )
