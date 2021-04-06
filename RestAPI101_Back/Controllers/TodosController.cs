@@ -2,6 +2,7 @@
 using System.Linq;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using RestAPI101_Back.DTOs;
@@ -27,6 +28,8 @@ namespace RestAPI101_Back.Controllers {
         
         // GET api/todos/
         [HttpGet(APIRoutes.Todos.GetAll)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public ActionResult<IEnumerable<TodoReadDTO>> GetAllTodos() {
             var user = usersRepository.GetUserByLogin(User.Identity!.Name);
 
@@ -38,7 +41,9 @@ namespace RestAPI101_Back.Controllers {
         }
 
         // GET api/todos/{id}
-        [HttpGet(APIRoutes.Todos.GetSpecified, Name = nameof(GetTodoById))] 
+        [HttpGet(APIRoutes.Todos.GetSpecified, Name = nameof(GetTodoById))]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<TodoReadDTO> GetTodoById(int id) {
             var user = usersRepository.GetUserByLogin(User.Identity!.Name);
             var item = user.Todos.FirstOrDefault(todo => todo.Id == id);
@@ -51,6 +56,7 @@ namespace RestAPI101_Back.Controllers {
 
         // POST api/todos/
         [HttpPost(APIRoutes.Todos.Create)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         public ActionResult<TodoReadDTO> CreateTodo(TodoCreateDTO todoCreateDto) {
             var user = usersRepository.GetUserByLogin(User.Identity!.Name);
             var item = mapper.Map<TodoCreateDTO, Todo>(todoCreateDto);
@@ -66,6 +72,8 @@ namespace RestAPI101_Back.Controllers {
         
         // PUT api/todos/{id}
         [HttpPut(APIRoutes.Todos.Update)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult UpdateTodo(int id, TodoUpdateDTO todoUpdateDto) {
             var user = usersRepository.GetUserByLogin(User.Identity!.Name);
             var item = user.Todos.FirstOrDefault(todo => todo.Id == id);
@@ -82,6 +90,8 @@ namespace RestAPI101_Back.Controllers {
         
         // PATCH api/todos/{id}
         [HttpPatch(APIRoutes.Todos.PartialUpdate)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult PartialUpdateTodo(int id, JsonPatchDocument<TodoUpdateDTO> patch) {
             var user = usersRepository.GetUserByLogin(User.Identity!.Name);
             var item = user.Todos.FirstOrDefault(todo => todo.Id == id);
@@ -102,6 +112,8 @@ namespace RestAPI101_Back.Controllers {
 
         // DELETE api/todos/{id}
         [HttpDelete(APIRoutes.Todos.Delete)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<TodoReadDTO> DeleteTodo(int id) {
             var user = usersRepository.GetUserByLogin(User.Identity!.Name);
             var item = user.Todos.FirstOrDefault(todo => todo.Id == id);

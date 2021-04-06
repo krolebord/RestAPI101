@@ -10,8 +10,8 @@ using RestAPI101_Back.Services;
 namespace RestAPI101_Back.Migrations
 {
     [DbContext(typeof(RestAppContext))]
-    [Migration("20210328115105_AddUsername")]
-    partial class AddUsername
+    [Migration("20210406082026_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
