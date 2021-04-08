@@ -68,7 +68,10 @@ namespace RestAPI101_Back {
             app.UseRouting();
 
             app.UseCors(builder => {
-                builder.AllowAnyOrigin().AllowAnyHeader();
+                builder
+                    .AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
             });
             
             app.UseAuthentication();
