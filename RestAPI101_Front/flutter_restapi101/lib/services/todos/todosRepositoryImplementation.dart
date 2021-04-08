@@ -33,6 +33,24 @@ class TodosRepositoryImplementation implements TodosRepository {
   }
 
   @override
+  Future<Todo> getTodo(int id) async {
+    var client = await getIt.getAsync<AuthenticatedClient>();
+
+    var request = http.Request('GET', APIURLs.getSpecifiedTodo(id));
+
+    var streamedResponse = await client.send(request);
+    var response = await http.Response.fromStream(streamedResponse);
+
+    switch(response.statusCode) {
+      case HttpStatus.ok: {
+        Todo todo = Todo.fromJson(json.decode(response.body));
+        return todo;
+      }
+      default: throw TodosLoadingError(errorMessage: response.body);
+    }
+  }
+
+  @override
   Future<void> createTodo(TodoWriteDTO todo) async {
     var client = await getIt.getAsync<AuthenticatedClient>();
 

@@ -3,6 +3,7 @@ import 'package:flutter_restapi101/models/todo/todoWriteDTO.dart';
 
 abstract class TodosRepository {
   Future<List<Todo>> getTodos();
+  Future<Todo> getTodo(int id);
 
   Future<void> createTodo(TodoWriteDTO todo);
 
