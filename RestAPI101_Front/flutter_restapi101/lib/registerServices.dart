@@ -10,4 +10,6 @@ void registerServices() {
   services.registerUserService();
 
   services.registerAuthenticatedClient();
+
+  services.registerTodosRepository();
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_restapi101/cubit/auth_cubit.dart';
 import 'package:flutter_restapi101/cubit/user_cubit.dart';
-import 'package:flutter_restapi101/models/apiUser.dart';
+import 'package:flutter_restapi101/models/user/apiUser.dart';
 import 'package:flutter_restapi101/widgets/userActions/userAction.dart';
 
 class UserActions extends StatelessWidget {
@@ -65,7 +65,7 @@ class _UserActions extends StatelessWidget {
           child: Row(children: [
             Padding(
               padding: const EdgeInsets.only(right: 4),
-              child: Icon(action.icon),
+              child: Icon(action.icon, color: Theme.of(context).colorScheme.onSurface),
             ),
             Text(action.label)
           ]),

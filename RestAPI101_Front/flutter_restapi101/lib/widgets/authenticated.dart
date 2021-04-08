@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_restapi101/cubit/todos_cubit.dart';
 import 'package:flutter_restapi101/cubit/user_cubit.dart';
-import 'package:flutter_restapi101/widgets/userActions/userActions.dart';
+import 'package:flutter_restapi101/widgets/home/homePage.dart';
 
 class Authenticated extends StatelessWidget {
   @override
@@ -10,18 +10,9 @@ class Authenticated extends StatelessWidget {
     return MultiBlocProvider(
       providers: [ 
         BlocProvider<UserCubit>(create: (context) => UserCubit()),
-        BlocProvider<TodosCubit>(create: (context) => TodosCubit()) 
+        BlocProvider<TodosCubit>(create: (context) => TodosCubit())
       ], 
-      child: Scaffold(
-        appBar: AppBar(
-          leading: Icon(Icons.api),
-          title: Text("Rest API 101"),
-          actions: [
-            UserActions(),
-            SizedBox(width: 16)
-          ],
-        ),
-      )
+      child: HomePage()
     );
   }
 }
