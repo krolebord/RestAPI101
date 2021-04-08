@@ -7,15 +7,15 @@ class APIURLs {
   static Uri registerUser() => Uri.parse('$baseurl/$prefix/auth/register');
 
   // User
-  static Uri getUser() => Uri.parse('$baseurl/$prefix/user/');
-  static Uri deleteUser() => Uri.parse('$baseurl/$prefix/user/');
-  static Uri changeName() => Uri.parse('$baseurl/$prefix/user/');
+  static Uri getUser() => Uri.parse('$baseurl/$prefix/user');
+  static Uri deleteUser() => Uri.parse('$baseurl/$prefix/user');
+  static Uri changeName() => Uri.parse('$baseurl/$prefix/user');
   
   // Todos
   static Uri getAllTodos() => Uri.parse('$baseurl/$prefix/todos');
   static Uri getSpecifiedTodo(int id) => Uri.parse('$baseurl/$prefix/todos');
   static Uri postTodo() => Uri.parse('$baseurl/$prefix/todos');
-  static Uri putTodo(int id) => Uri.parse('$baseurl/$prefix/todo/$id');
-  static Uri patchTodo(int id) => Uri.parse('$baseurl/$prefix/todo/$id');
-  static Uri deleteTodo(int id) => Uri.parse('$baseurl/$prefix/todo/$id');
+  static Uri putTodo(int id) => Uri.parse('$baseurl/$prefix/todos/$id');
+  static Uri patchTodo(int id) => Uri.parse('$baseurl/$prefix/todos/$id');
+  static Uri deleteTodo(int id) => Uri.parse('$baseurl/$prefix/todos/$id');
 }

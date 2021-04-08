@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter_restapi101/apiUrls.dart';
-import 'package:flutter_restapi101/models/apiUser.dart';
+import 'package:flutter_restapi101/models/user/apiUser.dart';
 import 'package:flutter_restapi101/services/authenticatedClient/authenticatedClient.dart';
 import 'package:flutter_restapi101/services/user/userService.dart';
 import 'package:get_it/get_it.dart';

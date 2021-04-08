@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_restapi101/models/apiUser.dart';
+import 'package:flutter_restapi101/models/user/apiUser.dart';
 import 'package:flutter_restapi101/services/user/userService.dart';
 import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';

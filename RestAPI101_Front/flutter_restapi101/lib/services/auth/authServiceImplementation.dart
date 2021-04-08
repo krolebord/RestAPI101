@@ -62,7 +62,7 @@ class AuthServiceImplementation implements AuthService {
     var client = http.Client();
 
     var request = http.Request('POST', APIURLs.registerUser());
-    request.headers['Content-type'] = 'application/json';
+    request.headers[HttpHeaders.contentTypeHeader] = 'application/json';
     request.body = json.encode(credentials.toJson());
 
     var streamedResponse = await client.send(request);
@@ -103,7 +103,7 @@ class AuthServiceImplementation implements AuthService {
     var client = http.Client();
 
     var request = http.Request('POST', APIURLs.login());
-    request.headers['Content-type'] = 'application/json';
+    request.headers[HttpHeaders.contentTypeHeader] = 'application/json';
     request.body = json.encode(credentials.toJson());
 
     var streamedResponse = await client.send(request);

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_restapi101/services/authenticatedClient/authenticatedClient.dart';
 import 'package:http/http.dart' as http;
 
@@ -10,7 +12,7 @@ class AuthenticatedClientImplementation implements AuthenticatedClient {
 
   @override
   Future<http.StreamedResponse> send(http.BaseRequest request) {
-    request.headers['Authorization'] = 'Bearer $token';
+    request.headers[HttpHeaders.authorizationHeader] = 'Bearer $token';
     return _client.send(request);
   }
 

@@ -44,6 +44,9 @@ class AuthCubit extends Cubit<AuthState> {
     } on AuthServiceError catch(e) {
       emit(AuthError(e.errorMessage));
       emit(AuthSignedOut());
+    } catch(e) {
+      emit(AuthError("Unexpected error occurred"));
+      emit(AuthSignedOut());
     }
   }
 }

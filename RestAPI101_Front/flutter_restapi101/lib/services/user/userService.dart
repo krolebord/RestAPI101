@@ -1,4 +1,4 @@
-import 'package:flutter_restapi101/models/apiUser.dart';
+import 'package:flutter_restapi101/models/user/apiUser.dart';
 
 abstract class UserService {
   ApiUser get currentUser;

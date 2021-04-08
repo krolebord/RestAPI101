@@ -24,6 +24,7 @@ dependencies:
   provider: ^5.0.0
   flutter_bloc: ^7.0.0
   get_it: ^6.0.0
+  auto_route: ^1.0.2
 
   animations: ^2.0.0
 
@@ -33,6 +34,7 @@ dev_dependencies:
     sdk: flutter
   build_runner: ^1.12.2
   json_serializable: ^4.1.0
+  auto_route_generator: ^1.0.2
 
 
 flutter:
