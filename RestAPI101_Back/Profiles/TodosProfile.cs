@@ -9,7 +9,7 @@ namespace RestAPI101_Back.Profiles {
 
             CreateMap<TodoCreateDTO, Todo>();
             
-            CreateMap<Todo, TodoUpdateDTO>();
+            CreateMap<Todo, TodoUpdateDTO>().ReverseMap();
         }
     }
 }
