@@ -1,2 +1,15 @@
 # RestAPI101
-Simple Todo list app
+
+Simple Todo list app built with `ASP.Net` and `Flutter`
+
+## Dynamic theme
+
+![Dynamic theme](Readme_gifs/front_v0.1_theme.gif)
+
+## Registration and login
+
+![Registration and login](Readme_gifs/front_v0.1_register.gif)
+
+## Todos
+
+![Todos](Readme_gifs/front_v0.1_todos.gif)
