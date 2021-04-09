@@ -60,6 +60,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
       ),
       rightChild: TabBarView(
         controller: _tabController,
+        physics: NeverScrollableScrollPhysics(),
         children: widget.tabs.map((tab) => tab.page).toList(growable: false),
       ),
       floatingActionButton: widget.tabs[_tabController.index].floatingActionButton,
