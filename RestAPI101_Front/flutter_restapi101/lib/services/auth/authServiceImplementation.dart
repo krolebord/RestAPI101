@@ -31,8 +31,8 @@ class AuthServiceImplementation implements AuthService {
   Stream<AuthUser?> get userChanges => _userChangedController.stream;
 
   @override
-  void initialize() {
-    if(_prefs.authCredentials != null && _prefs.authToken != null && _prefs.authToken!.valid) {
+  void initialize() async {
+    if(_prefs.authCredentials != null && _prefs.authToken != null) {
       var user = AuthUser(
         credentials: _prefs.authCredentials!,
         token: _prefs.authToken!
