@@ -8,6 +8,8 @@ part 'todo.g.dart';
 @JsonSerializable()
 class Todo extends Equatable {
   final int id;
+  @JsonKey(defaultValue: 0)
+  final int order;
   final bool done;
   final String title;
 
@@ -16,6 +18,7 @@ class Todo extends Equatable {
 
   Todo({
     required this.id,
+    required this.order,
     required this.done,
     required this.title,
     required this.description

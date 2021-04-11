@@ -9,7 +9,9 @@ abstract class TodosRepository {
 
   Future<void> updateTodo(int id, TodoWriteDTO todo);
 
-  Future<void> changeDone(int id, bool done);
+  Future<void> patchDone(int id, bool done);
+
+  Future<void> reorderTodo(int id, int newOrder);
   
   Future<void> deleteTodo(int id);
 }

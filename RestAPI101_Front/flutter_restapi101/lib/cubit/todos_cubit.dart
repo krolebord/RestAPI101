@@ -32,11 +32,14 @@ class TodosCubit extends Cubit<TodosState> {
   void createTodo(TodoWriteDTO todo) => 
     _handleUpdateAction(_repository.createTodo(todo)); 
 
-  void changeDone(int id, bool done) =>
-    _handleUpdateAction(_repository.changeDone(id, done));
+  void patchDone(int id, bool done) =>
+    _handleUpdateAction(_repository.patchDone(id, done));
 
   void updateTodo(int id, TodoWriteDTO todo) =>
     _handleUpdateAction(_repository.updateTodo(id, todo));
+
+  void reorderTodo(int id, int newOrder) =>
+    _handleUpdateAction(_repository.reorderTodo(id, newOrder));
   
   void deleteTodo(int id) =>
     _handleUpdateAction(_repository.deleteTodo(id));

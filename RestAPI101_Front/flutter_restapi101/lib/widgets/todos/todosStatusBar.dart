@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_restapi101/cubit/todos_cubit.dart';
-import 'package:flutter_restapi101/services/todos/todosRepository.dart';
 
 class TodosStatusBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener<TodosCubit, TodosState>(
       listener: (context, state) {
-        if(state is TodosUpdatingError)
+        if(state is TodosUpdatingErrorState)
           ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text('Unkown error occurred while updating')));
       },
@@ -84,7 +83,10 @@ class TodosStatusBar extends StatelessWidget {
             );
 
           if(state is TodosLoadingErrorState)
-            return Text('Couldn\'t sync todos');
+            return Tooltip(
+              message: 'Couldn\'t sync todos',
+              child: Icon(Icons.cloud_off),
+            );
 
           return Tooltip(
             message: "Synced",

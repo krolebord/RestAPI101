@@ -60,7 +60,7 @@ class _TodoTileState extends State<TodoTile> {
   }
 
   void _handleChangedDone(bool? value) {
-    context.read<TodosCubit>().changeDone(widget.todo.id, !done);
+    context.read<TodosCubit>().patchDone(widget.todo.id, !done);
     setState(() {
       done = !done;
     });
