@@ -18,7 +18,8 @@ namespace RestAPI101_Back.Services {
                 throw new ArgumentNullException(nameof(todo.Title));
             if(todo.User == null)
                 throw new ArgumentNullException(nameof(todo.User));
-
+            
+            todo.Order = (todo.User.Todos.Count + 1) * OrderDistance;
             context.Todos.Add(todo);
         }
 
@@ -26,6 +27,19 @@ namespace RestAPI101_Back.Services {
             if (todo == null)
                 throw new ArgumentNullException(nameof(todo));
             context.Todos.Remove(todo);
+        }
+
+        public int OrderDistance { get; } = 1024;
+        public void NormalizeOrderForUser(User user) {
+            var todos = user.Todos;
+
+            if (todos == null || !todos.Any())
+                return;
+            
+            todos = todos.OrderBy(x => x.Order).ToList();
+            
+            for (var i = 0; i < todos.Count; i++)
+                todos[i].Order = (i + 1) * OrderDistance;
         }
     }
 }

@@ -7,6 +7,8 @@ namespace RestAPI101_Back.Models {
         [Key]
         public int Id { get; set; }
         
+        public int Order { get; set; }
+        
         [Required]
         public bool Done { get; set; }
         

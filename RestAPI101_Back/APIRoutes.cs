@@ -24,6 +24,7 @@
             public const string Update = "{id}";
             public const string PartialUpdate = "{id}";
             public const string Delete = "{id}";
+            public const string Reorder = "reorder/{id}:{newOrder}";
         }
     }
 }
