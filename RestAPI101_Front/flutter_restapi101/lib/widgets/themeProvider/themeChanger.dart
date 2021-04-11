@@ -7,7 +7,13 @@ class ThemeChanger extends StatefulWidget {
 }
 
 class _ThemeChangerState extends State<ThemeChanger> {
-  bool darkMode = true;
+  late bool darkMode;
+
+  @override
+  void initState() {
+    super.initState();
+    darkMode = ThemeProvider.of(context, listen: false).theme.brightness == Brightness.dark;
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -19,11 +25,7 @@ class _ThemeChangerState extends State<ThemeChanger> {
       children: [
         Switch(
           value: darkMode,
-          onChanged: (value) {
-            darkMode = !darkMode;
-            ThemeProvider.of(context, listen: false)
-              .setTheme(darkMode ? ThemeData.dark() : ThemeData.light());
-          },
+          onChanged: _changeTheme,
           inactiveThumbColor: theme.colorScheme.onPrimary,
           inactiveTrackColor: theme.colorScheme.onPrimary.withOpacity(0.5),
         ),
@@ -32,5 +34,11 @@ class _ThemeChangerState extends State<ThemeChanger> {
           color: darkMode ? Colors.yellow[200] : Colors.amber[500])
       ],
     );
+  }
+
+  void _changeTheme(bool value) {
+    darkMode = !darkMode;
+    ThemeProvider.of(context, listen: false)
+      .setTheme(darkMode ? ThemeData.dark() : ThemeData.light());
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_restapi101/models/auth/authUser.dart';
+import 'package:flutter_restapi101/widgets/authWidgets/authenticated.dart';
 import 'package:flutter_restapi101/widgets/authWidgets/authenticator.dart';
-import 'package:flutter_restapi101/widgets/authenticated.dart';
 import 'package:flutter_restapi101/widgets/themeProvider/themeProvider.dart';
 import 'package:provider/provider.dart';
 

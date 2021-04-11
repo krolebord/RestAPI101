@@ -115,6 +115,8 @@ namespace RestAPI101_Back.Controllers {
 
         // POST api/todos/reorder
         [HttpPost(APIRoutes.Todos.Reorder)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult ReorderTodos(int id, int newOrder) {
             var user = usersRepository.GetUserByLogin(User.Identity!.Name);
             var todos = user.Todos?.OrderBy(x => x.Order).ToList();

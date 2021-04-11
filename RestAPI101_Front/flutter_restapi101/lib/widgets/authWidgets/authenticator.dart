@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_restapi101/cubit/auth_cubit.dart';
 import 'package:flutter_restapi101/models/auth/authUser.dart';
-import 'package:flutter_restapi101/widgets/authScaffold.dart';
+import 'package:flutter_restapi101/widgets/authWidgets/authScaffold.dart';
 import 'signedOut.dart';
 
 class Authenticator extends StatelessWidget {
@@ -37,5 +37,4 @@ class Authenticator extends StatelessWidget {
       ),
     );
   }
-  
 }
