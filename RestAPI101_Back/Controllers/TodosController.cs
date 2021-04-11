@@ -39,12 +39,7 @@ namespace RestAPI101_Back.Controllers {
             if (todos == null || !todos.Any())
                 return NoContent();
             
-            
             var mappedTodos = mapper.Map<IEnumerable<TodoReadDTO>>(todos.OrderBy(todo => todo.Order));
-            int order = 0;
-            //foreach (var todo in mappedTodos)
-            //    todo.Order = order++;
-            
             return Ok(mappedTodos);
         }
 

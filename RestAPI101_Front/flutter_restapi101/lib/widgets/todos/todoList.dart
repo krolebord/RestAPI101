@@ -12,11 +12,10 @@ class TodoList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ReorderableListView.builder(
-      itemCount: todos.length + 1,
+      padding: const EdgeInsets.only(bottom: 78),
+      itemCount: todos.length ,
       onReorder: (oldIndex, newIndex) => _handleReorder(context, oldIndex, newIndex),
       itemBuilder: (context, index) {
-        if(index >= todos.length)
-          return SizedBox(height: 78, key: ValueKey(todos.length));
         var todo = todos[index];
         return TodoTile(todo: todo, key: ValueKey(todo.id));
       }
