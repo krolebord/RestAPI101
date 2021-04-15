@@ -14,7 +14,7 @@ namespace RestAPI101_Back.Controllers {
         private readonly IMapper mapper;
 
         public AuthenticationController(IAuthenticationService authenticationService, IUsersService usersService, IMapper mapper) {
-            this.authenticationService = authenticationService;
+            this.authenticationService = authenticationService; 
             this.usersService = usersService;
             this.mapper = mapper;
         }
