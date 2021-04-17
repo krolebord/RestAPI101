@@ -42,13 +42,23 @@ namespace RestAPI101_Back.Services {
             return new ServiceResponse<User>(user);
         }
 
-        public void ChangeUsername(string login, UserChangeNameDTO username) {
+        public void ChangeUsername(string login, string newUsername) {
             var user = usersRepository.GetUserByLogin(login);
 
             if (user == null)
                 throw new ArgumentException(nameof(login));
 
-            user.Username = username.Username;
+            user.Username = newUsername;
+            usersRepository.SaveChanges();
+        }
+
+        public void ChangePassword(string login, string newPassword) {
+            var user = usersRepository.GetUserByLogin(login);
+
+            if (user == null)
+                throw new ArgumentException(nameof(login));
+
+            user.Password = newPassword;
             usersRepository.SaveChanges();
         }
 

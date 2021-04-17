@@ -13,6 +13,7 @@
             public const string Get = "";
             public const string Delete = "";
             public const string ChangeName = "username";
+            public const string ChangePassword = "password";
         }
         
         // Todos
