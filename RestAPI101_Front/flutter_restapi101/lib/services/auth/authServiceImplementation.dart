@@ -59,16 +59,11 @@ class AuthServiceImplementation implements AuthService {
 
   @override
   Future<void> register(AuthRegisterCredentials credentials) async {
-    var client = http.Client();
-
-    var request = http.Request('POST', APIURLs.registerUser());
+    var request = ApiRequests.register();
     request.headers[HttpHeaders.contentTypeHeader] = 'application/json';
     request.body = json.encode(credentials.toJson());
 
-    var streamedResponse = await client.send(request);
-    var response = await http.Response.fromStream(streamedResponse);
-
-    client.close();
+    var response = await _sendRequest(request);
 
     if(response.statusCode == HttpStatus.ok) {
       await login(credentials);
@@ -100,17 +95,12 @@ class AuthServiceImplementation implements AuthService {
   }
 
   Future<AuthToken> _getToken(AuthCredentials credentials) async {
-    var client = http.Client();
-
-    var request = http.Request('POST', APIURLs.login());
+    var request = ApiRequests.login();
     request.headers[HttpHeaders.contentTypeHeader] = 'application/json';
     request.body = json.encode(credentials.toJson());
 
-    var streamedResponse = await client.send(request);
-    var response = await http.Response.fromStream(streamedResponse);
+    var response = await _sendRequest(request);
 
-    client.close();
-  
     if(response.statusCode == HttpStatus.ok) {
       Map<String, dynamic> responseBody = jsonDecode(response.body);
       return AuthToken.fromJson(responseBody);
@@ -128,5 +118,16 @@ class AuthServiceImplementation implements AuthService {
 
     if(_userChangedController.hasListener)
       _userChangedController.add(_currentUser);
+  }
+
+  Future<http.Response> _sendRequest(http.Request request) async {
+    var client = http.Client();
+
+    var streamedResponse = await client.send(request);
+    var response = await http.Response.fromStream(streamedResponse);
+
+    client.close();
+
+    return response;
   }
 }

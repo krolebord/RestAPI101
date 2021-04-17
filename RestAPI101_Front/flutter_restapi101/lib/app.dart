@@ -6,7 +6,7 @@ import 'package:flutter_restapi101/services/auth/authService.dart';
 import 'package:flutter_restapi101/widgets/authWidgets/authenticated.dart';
 import 'package:flutter_restapi101/widgets/authWidgets/authenticator.dart';
 import 'package:flutter_restapi101/widgets/home/homePage.dart';
-import 'package:flutter_restapi101/widgets/pages/accountPage.dart';
+import 'package:flutter_restapi101/widgets/account/accountPage.dart';
 import 'package:flutter_restapi101/widgets/pages/settingsPage.dart';
 import 'package:flutter_restapi101/widgets/themeProvider/themeProvider.dart';
 import 'package:get_it/get_it.dart';
@@ -18,6 +18,7 @@ class RestAPIApp extends StatelessWidget {
     return ThemeProvider(
       initialTheme: ThemeData.dark(),
       builder: (context, theme) => VRouter(
+        debugShowCheckedModeBanner: false,
         title: "RestAPI 101",
         theme: theme,
         initialUrl: AppRoutes.homeRoute,
@@ -46,9 +47,9 @@ class RestAPIApp extends StatelessWidget {
         builder: (context) => BlocListener<AuthCubit, AuthState>(
           listener: (context, state) {
             if(state is AuthSignedIn)
-              context.vRouter.push(AppRoutes.homeRoute);
+              context.vRouter.pushReplacement(AppRoutes.homeRoute);
             else if(state is AuthSignedOut)
-              context.vRouter.push(AppRoutes.authRoute);
+              context.vRouter.pushReplacement(AppRoutes.authRoute);
           },
           child: child,
         ),
@@ -68,7 +69,7 @@ class RestAPIApp extends StatelessWidget {
           widget: Builder(
             builder: (context) {
               return Authenticator(
-                onSignedIn: (user) => context.vRouter.push(AppRoutes.homeRoute),
+                onSignedIn: (user) => context.vRouter.pushReplacement(AppRoutes.homeRoute),
               );
             }
           )
@@ -81,7 +82,7 @@ class RestAPIApp extends StatelessWidget {
     return VGuard(
       beforeEnter: (vRedirector) async {
         if(GetIt.instance.get<AuthService>().currentUser == null)
-          vRedirector.push(AppRoutes.authRoute);
+          vRedirector.pushReplacement(AppRoutes.authRoute);
       },
       stackedRoutes: [
         VNester(
@@ -100,7 +101,7 @@ class RestAPIApp extends StatelessWidget {
         widget: HomePage()
       ),
       VWidget(
-        path: AppRoutes.accountRoute, 
+        path: AppRoutes.accountRoute,
         widget: AccountPage()
       ),
       VWidget(

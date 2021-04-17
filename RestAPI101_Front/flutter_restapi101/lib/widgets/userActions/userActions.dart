@@ -18,7 +18,7 @@ class UserActions extends StatelessWidget {
               .showSnackBar(SnackBar(content: Text(state.errorMessage)));
         },
         builder: (context, state) {
-          if(state is UserInitial) {
+          if(state is UserLoading) {
             return SizedBox(width: 40, height: 40, child: CircularProgressIndicator());
           }
 
@@ -27,11 +27,10 @@ class UserActions extends StatelessWidget {
           }
 
           return TextButton(
-            onPressed: () => context.read<UserCubit>().update(), 
+            onPressed: () => context.read<UserCubit>().load(), 
             child: Text('Load user'),
           );
         }, 
-        
       ),
     );
   }

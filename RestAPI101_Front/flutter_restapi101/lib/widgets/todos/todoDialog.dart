@@ -60,17 +60,17 @@ class _TodoDialogState extends State<TodoDialog> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     ElevatedButton(
-                      child: Text('Save'),
-                      onPressed: () => _handleSave(context),
-                    ),
-                    SizedBox(width: 4),
-                    ElevatedButton(
                       child: Text('Cancel'),
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.resolveWith<Color>(
                           (states) => Theme.of(context).errorColor)
                       ),
                       onPressed: () => _handleCancel(context),
+                    ),
+                    SizedBox(width: 4),
+                    ElevatedButton(
+                      child: Text('Save'),
+                      onPressed: () => _handleSave(context),
                     )
                   ],
                 )

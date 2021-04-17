@@ -3,20 +3,16 @@ import 'dart:io';
 import 'package:flutter_restapi101/apiUrls.dart';
 import 'package:flutter_restapi101/models/todo/todo.dart';
 import 'package:flutter_restapi101/models/todo/todoWriteDTO.dart';
-import 'package:flutter_restapi101/services/authenticatedClient/authenticatedClient.dart';
+import 'package:flutter_restapi101/services/authenticatedServiceMixin.dart';
 import 'package:flutter_restapi101/services/todos/todosRepository.dart';
 import 'package:get_it/get_it.dart';
-import 'package:http/http.dart' as http;
 
-class TodosRepositoryImplementation implements TodosRepository {
+class TodosRepositoryImplementation with AuthenticatedServiceMixin implements TodosRepository {
   final GetIt getIt = GetIt.instance;
-
-  static const String contentType = 'application/json';
 
   @override
   Future<List<Todo>> getTodos() async {
-    var request = http.Request('GET', APIURLs.getAllTodos());
-    var response = await _sendRequest(request);
+    var response = await sendRequest(ApiRequests.getAllTodos());
 
     switch(response.statusCode) {
       case HttpStatus.ok: {
@@ -30,8 +26,8 @@ class TodosRepositoryImplementation implements TodosRepository {
 
   @override
   Future<Todo> getTodo(int id) async {
-    var request = http.Request('GET', APIURLs.getSpecifiedTodo(id));
-    var response = await _sendRequest(request);
+    var request = ApiRequests.getSpecifiedTodo(id);
+    var response = await sendRequest(request);
 
     switch(response.statusCode) {
       case HttpStatus.ok: {
@@ -44,11 +40,10 @@ class TodosRepositoryImplementation implements TodosRepository {
 
   @override
   Future<void> createTodo(TodoWriteDTO todo) async {
-    var request = http.Request('POST', APIURLs.postTodo());
-    request.headers[HttpHeaders.contentTypeHeader] = contentType;
+    var request = ApiRequests.postTodo();
     request.body = json.encode(todo.toJson());
 
-    var response = await _sendRequest(request);
+    var response = await sendRequest(request, jsonContent: true);
 
     switch(response.statusCode) {
       case HttpStatus.created: return;
@@ -58,11 +53,10 @@ class TodosRepositoryImplementation implements TodosRepository {
 
   @override
   Future<void> updateTodo(int id, TodoWriteDTO todo) async {
-    var request = http.Request('PUT', APIURLs.putTodo(id));
-    request.headers[HttpHeaders.contentTypeHeader] = contentType;
+    var request = ApiRequests.putTodo(id);
     request.body = json.encode(todo.toJson());
 
-    var response = await _sendRequest(request);
+    var response = await sendRequest(request, jsonContent: true);
 
     switch(response.statusCode) {
       case HttpStatus.noContent: return;
@@ -72,8 +66,7 @@ class TodosRepositoryImplementation implements TodosRepository {
 
   @override
   Future<void> patchDone(int id, bool done) async {
-    var request = http.Request('PATCH', APIURLs.patchTodo(id));
-    request.headers[HttpHeaders.contentTypeHeader] = contentType;
+    var request = ApiRequests.patchTodo(id);
     request.body = json.encode([
       {
         'op': 'replace',
@@ -82,7 +75,7 @@ class TodosRepositoryImplementation implements TodosRepository {
       }
     ]);
 
-    var response = await _sendRequest(request);
+    var response = await sendRequest(request, jsonContent: true);
 
     switch(response.statusCode) {
       case HttpStatus.noContent: return;
@@ -92,8 +85,8 @@ class TodosRepositoryImplementation implements TodosRepository {
 
   @override
   Future<void> reorderTodo(int id, int newOrder) async {
-    var request = http.Request('POST', APIURLs.reorderTodo(id, newOrder));
-    var response = await _sendRequest(request);
+    var request = ApiRequests.reorderTodo(id, newOrder);
+    var response = await sendRequest(request);
 
     switch(response.statusCode) {
       case HttpStatus.ok: return;
@@ -104,22 +97,12 @@ class TodosRepositoryImplementation implements TodosRepository {
   
   @override
   Future<void> deleteTodo(int id) async {
-    var request = http.Request('DELETE', APIURLs.deleteTodo(id));
-    var response = await _sendRequest(request);
-
+    var request = ApiRequests.deleteTodo(id);
+    var response = await sendRequest(request);
 
     switch(response.statusCode) {
       case HttpStatus.ok: return;
       default: throw TodosUpdatingError(errorMessage: response.body);
     }
-  }
-
-
-  Future<http.Response> _sendRequest(http.Request request) async {
-    var client = await getIt.getAsync<AuthenticatedClient>();
-    var streamedResponse = await client.send(request);
-    var response = await http.Response.fromStream(streamedResponse);
-    client.close();
-    return response;
   }
 }
