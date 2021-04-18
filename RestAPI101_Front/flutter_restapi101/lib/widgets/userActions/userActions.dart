@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_restapi101/appRoutes.dart';
+import 'package:vrouter/vrouter.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_restapi101/cubit/auth_cubit.dart';
 import 'package:flutter_restapi101/cubit/user_cubit.dart';
@@ -16,7 +18,7 @@ class UserActions extends StatelessWidget {
               .showSnackBar(SnackBar(content: Text(state.errorMessage)));
         },
         builder: (context, state) {
-          if(state is UserInitial) {
+          if(state is UserLoading) {
             return SizedBox(width: 40, height: 40, child: CircularProgressIndicator());
           }
 
@@ -25,11 +27,10 @@ class UserActions extends StatelessWidget {
           }
 
           return TextButton(
-            onPressed: () => context.read<UserCubit>().update(), 
+            onPressed: () => context.read<UserCubit>().load(), 
             child: Text('Load user'),
           );
         }, 
-        
       ),
     );
   }
@@ -46,12 +47,12 @@ class _UserActions extends StatelessWidget {
       UserAction(
         icon: Icons.account_circle, 
         label: 'Account', 
-        onPressed: (context) => print('Account')
+        onPressed: (context) => context.vRouter.push(AppRoutes.accountRoute)
       ),
       UserAction(
         icon: Icons.settings, 
         label: "Settings", 
-        onPressed: (context) => print('Settings')
+        onPressed: (context) => context.vRouter.push(AppRoutes.settingsRoute)
       ),
       UserAction(
         icon: Icons.logout, 

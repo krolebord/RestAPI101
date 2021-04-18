@@ -1,11 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_restapi101/widgets/home/adaptiveLayout.dart';
 import 'package:flutter_restapi101/widgets/home/appTab.dart';
+import 'package:flutter_restapi101/widgets/todos/todosFAB.dart';
+import 'package:flutter_restapi101/widgets/todos/todosPage.dart';
 
 class HomePage extends StatefulWidget {
   final List<AppTab> tabs;
 
-  HomePage({required this.tabs});
+  HomePage() : 
+    tabs = [
+      AppTab(
+        tabIcon: Icons.list_alt, 
+        tabText: "Todos", 
+        page: TodosPage(),
+        floatingActionButton: TodosFAB()
+      ),
+      AppTab(
+        tabIcon: Icons.sticky_note_2, 
+        tabText: "Notes", 
+        page: Center(child: Text('Work in progress')),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {},
+          child: Icon(Icons.note_add),
+        )
+      ),
+      AppTab(
+        tabIcon: Icons.settings_ethernet, 
+        tabText: "Commands", 
+        page: Center(child: Text('Work in progress')),
+      )
+    ];
 
   @override
   _HomePageState createState() => _HomePageState();

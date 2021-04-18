@@ -113,8 +113,8 @@ namespace RestAPI101_Back.Controllers {
             return NoContent();
         }
 
-        // POST api/todos/reorder
-        [HttpPost(APIRoutes.Todos.Reorder)]
+        // PUT api/todos/reorder
+        [HttpPut(APIRoutes.Todos.Reorder)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult ReorderTodos(int id, int newOrder) {

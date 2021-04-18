@@ -6,9 +6,9 @@ import 'package:flutter_restapi101/widgets/authWidgets/authScaffold.dart';
 import 'signedOut.dart';
 
 class Authenticator extends StatelessWidget {
-  final Widget Function(BuildContext context, AuthUser user) builder;
+  final void Function(AuthUser user) onSignedIn;
 
-  Authenticator({required Key key, required this.builder}) : super(key: key);
+  Authenticator({required this.onSignedIn});
 
   @override
   Widget build(BuildContext context) {
@@ -22,17 +22,10 @@ class Authenticator extends StatelessWidget {
           }
         },
         builder: (context, state) {
-          if(state is AuthLoading) {
-            return AuthScaffold(child: CircularProgressIndicator());
-          }
-          else if(state is AuthSignedOut) {
+          if(state is AuthSignedOut)
             return AuthScaffold(child: SignedOut());
-          }
-          else if(state is AuthSignedIn) {
-            return builder.call(context, state.user);
-          }
-
-          return AuthScaffold(child: Center(child: Text('Unexpected error occured')));
+          
+          return AuthScaffold(child: CircularProgressIndicator());
         },
       ),
     );

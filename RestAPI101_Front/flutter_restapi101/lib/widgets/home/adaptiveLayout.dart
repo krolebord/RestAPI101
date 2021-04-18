@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_restapi101/widgets/userActions/userActions.dart';
+import 'package:flutter_restapi101/widgets/userActions/userAppbar.dart';
 
 class AdaptiveLayout extends StatelessWidget {
   final int widthBreakpoint;
@@ -59,13 +59,7 @@ class AdaptiveLayout extends StatelessWidget {
           );
 
         return Scaffold(
-          appBar: AppBar(
-            title: Text("Rest API 101"),
-            actions: [
-              UserActions(),
-              SizedBox(width: 24)
-            ],
-          ),
+          appBar: UserAppBar(),
           drawer: drawer,
           body: body,
           floatingActionButton: fab

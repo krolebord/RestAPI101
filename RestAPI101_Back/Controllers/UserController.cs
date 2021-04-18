@@ -30,9 +30,20 @@ namespace RestAPI101_Back.Controllers {
             return Ok(userDTO);
         }
 
-        [HttpPost(APIRoutes.User.ChangeName)]
+        [HttpPut(APIRoutes.User.ChangeName)]
         public ActionResult ChangeUsername(UserChangeNameDTO username) {
-            usersService.ChangeUsername(User.Identity!.Name, username);
+            usersService.ChangeUsername(User.Identity!.Name, username.Username);
+            return Ok();
+        }
+
+        [HttpPost(APIRoutes.User.ChangePassword)]
+        public ActionResult ChangePassword(UserChangePasswordDTO password) {
+            var user = usersRepository.GetUserByLogin(User.Identity!.Name);
+
+            if (user.Password != password.OldPassword)
+                return BadRequest("Wrong password");
+            
+            usersService.ChangePassword(user.Login, password.NewPassword);
             return Ok();
         }
 

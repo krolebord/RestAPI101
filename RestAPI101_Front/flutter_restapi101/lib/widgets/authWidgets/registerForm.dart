@@ -4,6 +4,7 @@ import 'package:flutter_restapi101/cubit/auth_cubit.dart';
 import 'package:flutter_restapi101/models/auth/authRegisterCredentials.dart';
 import 'package:flutter_restapi101/widgets/authWidgets/authFormField.dart';
 
+// TODO Convert to Stateful
 class RegisterForm extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
 

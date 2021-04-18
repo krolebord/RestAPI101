@@ -1,12 +1,12 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter_restapi101/apiUrls.dart';
 import 'package:flutter_restapi101/models/user/apiUser.dart';
-import 'package:flutter_restapi101/services/authenticatedClient/authenticatedClient.dart';
+import 'package:flutter_restapi101/models/user/userChangePasswordDTO.dart';
+import 'package:flutter_restapi101/services/authenticatedServiceMixin.dart';
 import 'package:flutter_restapi101/services/user/userService.dart';
-import 'package:get_it/get_it.dart';
-import 'package:http/http.dart' as http;
 
-class UserServiceImplementation implements UserService {
+class UserServiceImplementation with AuthenticatedServiceMixin implements UserService {
   bool _loaded = false;
   late ApiUser _user;
 
@@ -17,29 +17,50 @@ class UserServiceImplementation implements UserService {
   ApiUser get currentUser => _user;
 
   @override
-  Future<void> updateUser() async {
-    var client = await GetIt.instance.getAsync<AuthenticatedClient>();
+  Future<void> loadUser() async {
+    var response = await sendRequest(ApiRequests.getUser());
 
-    var request = http.Request('GET', APIURLs.getUser());
-
-    var streamedResponse = await client.send(request);
-    var response = await http.Response.fromStream(streamedResponse);
-
-    client.close();
+    if(response.statusCode != HttpStatus.ok)
+      throw UserServiceError(message: 'Couldn\'t load user');
 
     _user = ApiUser.fromJson(json.decode(response.body));
     _loaded = true;
   }
 
   @override
-  Future<void> changeUsername(String username) {
-    // TODO: implement changeUsername
-    throw UnimplementedError();
+  Future<void> changeUsername(String username) async {
+    var request = ApiRequests.changeUsername();
+    request.body = json.encode({
+      'username': username
+    });
+
+    var response = await sendRequest(request, jsonContent: true);
+
+    if(response.statusCode != HttpStatus.ok)
+      throw UserServiceError(message: 'Couldn\'t change username');
   }
 
   @override
-  Future<void> deleteUser() {
-    // TODO: implement deleteUser
-    throw UnimplementedError();
+  Future<void> changePassword(UserChangePasswordDTO changePassword) async {
+    var request = ApiRequests.changePassword();
+    request.body = json.encode(changePassword.toJson());
+
+    var response = await sendRequest(request, jsonContent: true);
+    
+    switch(response.statusCode) {
+      case HttpStatus.ok: return;
+      case HttpStatus.badRequest: 
+        throw UserServiceError(message: 'Couldn\'t change password: wrong old password');
+      default: 
+        throw UserServiceError(message: 'Couldn\'t change password');
+    }
+  }
+
+  @override
+  Future<void> deleteUser() async {
+    var response = await sendRequest(ApiRequests.deleteUser());
+
+    if(response.statusCode != HttpStatus.ok)
+      throw UserServiceError(message: 'Couldn\'t delete account');
   }
 }

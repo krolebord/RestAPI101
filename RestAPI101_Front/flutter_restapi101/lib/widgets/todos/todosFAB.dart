@@ -7,9 +7,8 @@ import 'package:flutter_restapi101/widgets/todos/todoDialog.dart';
 class TodosFAB extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton.extended(
-      icon: const Icon(Icons.add),
-      label: const Text('Add'),
+    return FloatingActionButton(
+      child: const Icon(Icons.add),
       onPressed: () => _handlePressed(context)
     );
   }
