@@ -16,6 +16,16 @@
             public const string ChangePassword = "password";
         }
         
+        // Labels
+        public const string LabelsController = "api/labels";
+        public static class Labels {
+            public const string GetAll = "";
+            public const string GetSpecified = "{id}";
+            public const string Create = "";
+            public const string Update = "{id}";
+            public const string Delete = "{id}";
+        }
+        
         // Todos
         public const string TodosController = "api/todos";
         public static class Todos {
@@ -26,6 +36,8 @@
             public const string PartialUpdate = "{id}";
             public const string Delete = "{id}";
             public const string Reorder = "reorder/{id}:{newOrder}";
+            public const string AddLabel = "label/{id}:{labelId}";
+            public const string RemoveLabel = "label/{id}:{labelId}";
         }
     }
 }

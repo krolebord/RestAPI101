@@ -15,9 +15,9 @@ namespace RestAPI101_Back.Services {
 
         public void CreateTodo(Todo todo) {
             if(string.IsNullOrWhiteSpace(todo.Title))
-                throw new ArgumentNullException(nameof(todo.Title));
+                throw new ArgumentNullException(nameof(todo), "Title is null or empty");
             if(todo.User == null)
-                throw new ArgumentNullException(nameof(todo.User));
+                throw new ArgumentNullException(nameof(todo), "User is null");
             
             todo.Order = (todo.User.Todos.Count + 1) * OrderDistance;
             context.Todos.Add(todo);

@@ -17,6 +17,7 @@ namespace RestAPI101_Back.Models {
         [Required]
         public string Username { get; set; }
 
-        public List<Todo> Todos { get; set; } = new ();
+        public List<Todo> Todos { get; } = new ();
+        public HashSet<Label> Labels { get; } = new ();
     }
 }

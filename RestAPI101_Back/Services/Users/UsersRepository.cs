@@ -1,23 +1,26 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using RestAPI101_Back.Models;
 
 namespace RestAPI101_Back.Services {
     public class UsersRepository : IUsersRepository {
-        private RestAppContext context;
+        private readonly RestAppContext context;
 
         public UsersRepository(RestAppContext context) {
             this.context = context;
 
-            context.Users.Include(user => user.Todos).Load();
+            // TODO ???
+            context.Users
+                .Include(user => user.Todos)
+                .ThenInclude(user => user.Labels)
+                .AsSplitQuery()
+                .Load();
         }
 
         public bool SaveChanges() => context.SaveChanges() >= 0;
-
-        public User GetUserById(int id) {
-            return context.Users.Find(id);
-        }
 
         public User GetUserByLogin(string login) {
             return context.Users.FirstOrDefault(user => user.Login == login);

@@ -1,11 +1,12 @@
-﻿using RestAPI101_Back.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using RestAPI101_Back.Models;
 
 namespace RestAPI101_Back.Services {
-    public interface IUsersRepository {
-        public bool SaveChanges();
-
-        public User GetUserById(int id);
+    public interface IUsersRepository : IRepository {
         public User GetUserByLogin(string login);
+        
         public bool LoginOccupied(string login);
 
         public bool CreateUser(User user);

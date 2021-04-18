@@ -27,8 +27,9 @@ namespace RestAPI101_Back {
 
             services.AddDbContext<RestAppContext>();
 
-            services.AddScoped<ITodosRepository, TodosRepository>();
             services.AddScoped<IUsersRepository, UsersRepository>();
+            services.AddScoped<ILabelsRepository, LabelsRepository>();
+            services.AddScoped<ITodosRepository, TodosRepository>();
 
             services.AddScoped<IUsersService, UsersService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();

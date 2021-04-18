@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RestAPI101_Back.Models {
@@ -18,5 +19,7 @@ namespace RestAPI101_Back.Models {
         public string Description { get; set; }
         
         public User User { get; set; }
+
+        public HashSet<Label> Labels { get; set; } = new();
     }
 }
