@@ -1,5 +1,7 @@
-﻿namespace RestAPI101_Back.Services {
-    public interface IRepository {
+﻿namespace RestAPI101_Back.Services
+{
+    public interface IRepository
+    {
         public bool SaveChanges();
     }
 }

@@ -1,5 +1,7 @@
-﻿namespace RestAPI101_Back.Services {
-    public enum TodoFilterMode {
+﻿namespace RestAPI101_Back.Services
+{
+    public enum TodoFilterMode
+    {
         Or,
         And
     }

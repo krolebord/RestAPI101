@@ -11,33 +11,38 @@ using RestAPI101_Back.Filters;
 using RestAPI101_Back.Models;
 using RestAPI101_Back.Services;
 
-namespace RestAPI101_Back.Controllers {
+namespace RestAPI101_Back.Controllers 
+{
     [ApiController] 
     [Route(APIRoutes.TodosController)]
     [Authorize]
     [TypeFilter(typeof(UserExists))]
-    public class TodosController : ControllerBase {
-        private readonly ITodosRepository todosRepository;
-        private readonly IUsersRepository usersRepository;
-        private readonly IMapper mapper;
+    public class TodosController : ControllerBase 
+    {
+        private readonly ITodosRepository _todosRepository;
+        private readonly IUsersRepository _usersRepository;
+        private readonly IMapper _mapper;
         
-        public TodosController(ITodosRepository todosRepository, IUsersRepository usersRepository, IMapper mapper) {
-            this.todosRepository = todosRepository;
-            this.usersRepository = usersRepository;
-            this.mapper = mapper;
+        public TodosController(ITodosRepository todosRepository, IUsersRepository usersRepository, IMapper mapper) 
+        {
+            this._todosRepository = todosRepository;
+            this._usersRepository = usersRepository;
+            this._mapper = mapper;
         }
         
         // GET api/todos?mode&labels
         [HttpGet(APIRoutes.Todos.GetAll)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public ActionResult<IEnumerable<TodoReadDTO>> GetTodos([FromQuery]int[] labels = null, [FromQuery]TodoFilterMode mode = TodoFilterMode.Or) {
+        public ActionResult<IEnumerable<TodoReadDTO>> GetTodos([FromQuery]int[] labels = null, [FromQuery]TodoFilterMode mode = TodoFilterMode.Or) 
+        {
             if (labels != null && labels.Any())
                 return GetLabeledTodos(labels.ToHashSet(), mode);
             return GetAllTodos();
         }
 
-        private ActionResult<IEnumerable<TodoReadDTO>> GetAllTodos() {
+        private ActionResult<IEnumerable<TodoReadDTO>> GetAllTodos() 
+        {
             var user = GetUser();
 
             var todos = user.Todos;
@@ -45,11 +50,12 @@ namespace RestAPI101_Back.Controllers {
             if (todos == null || !todos.Any())
                 return NoContent();
             
-            var mappedTodos = mapper.Map<IEnumerable<TodoReadDTO>>(todos.OrderBy(todo => todo.Order));
+            var mappedTodos = _mapper.Map<IEnumerable<TodoReadDTO>>(todos.OrderBy(todo => todo.Order));
             return Ok(mappedTodos);
         }
 
-        private ActionResult<IEnumerable<TodoReadDTO>> GetLabeledTodos(IReadOnlySet<int> labelIds, TodoFilterMode mode) {
+        private ActionResult<IEnumerable<TodoReadDTO>> GetLabeledTodos(IReadOnlySet<int> labelIds, TodoFilterMode mode) 
+        {
             var user = GetUser();
 
             Func<Todo, bool> predicate = mode switch {
@@ -64,7 +70,7 @@ namespace RestAPI101_Back.Controllers {
             if (!todos.Any())
                 return NoContent();
 
-            var mappedTodos = mapper.Map<IEnumerable<TodoReadDTO>>(todos.OrderBy(todo => todo.Order));
+            var mappedTodos = _mapper.Map<IEnumerable<TodoReadDTO>>(todos.OrderBy(todo => todo.Order));
             return Ok(mappedTodos);
         }
 
@@ -72,27 +78,29 @@ namespace RestAPI101_Back.Controllers {
         [HttpGet(APIRoutes.Todos.GetSpecified, Name = nameof(GetTodoById))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<TodoReadDTO> GetTodoById(int id) {
+        public ActionResult<TodoReadDTO> GetTodoById(int id) 
+        {
             var todo = GetTodo(id);
 
             if(todo == null)
                 return NotFound();
             
-            return Ok(mapper.Map<Todo, TodoReadDTO>(todo));
+            return Ok(_mapper.Map<Todo, TodoReadDTO>(todo));
         }
 
         // POST api/todos/
         [HttpPost(APIRoutes.Todos.Create)]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        public ActionResult<TodoReadDTO> CreateTodo(TodoCreateDTO todoCreateDto) {
+        public ActionResult<TodoReadDTO> CreateTodo(TodoCreateDTO todoCreateDto) 
+        {
             var user = GetUser();
-            var todo = mapper.Map<TodoCreateDTO, Todo>(todoCreateDto);
+            var todo = _mapper.Map<TodoCreateDTO, Todo>(todoCreateDto);
             todo.User = user;
-            todosRepository.CreateTodo(todo);
+            _todosRepository.CreateTodo(todo);
 
-            todosRepository.SaveChanges();
+            _todosRepository.SaveChanges();
 
-            var readDto = mapper.Map<Todo, TodoReadDTO>(todo);
+            var readDto = _mapper.Map<Todo, TodoReadDTO>(todo);
             
             return CreatedAtRoute(nameof(GetTodoById), new { Id = readDto.Id }, readDto);
         }
@@ -101,15 +109,16 @@ namespace RestAPI101_Back.Controllers {
         [HttpPut(APIRoutes.Todos.Update)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult UpdateTodo(int id, TodoUpdateDTO todoUpdateDto) {
+        public ActionResult UpdateTodo(int id, TodoUpdateDTO todoUpdateDto) 
+        {
             var todo = GetTodo(id);
 
             if (todo == null)
                 return NotFound();
             
-            mapper.Map<TodoUpdateDTO, Todo>(todoUpdateDto, todo);
+            _mapper.Map<TodoUpdateDTO, Todo>(todoUpdateDto, todo);
             
-            todosRepository.SaveChanges();
+            _todosRepository.SaveChanges();
 
             return NoContent();
         }
@@ -118,19 +127,20 @@ namespace RestAPI101_Back.Controllers {
         [HttpPatch(APIRoutes.Todos.PartialUpdate)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult PartialUpdateTodo(int id, JsonPatchDocument<TodoUpdateDTO> patch) {
+        public ActionResult PartialUpdateTodo(int id, JsonPatchDocument<TodoUpdateDTO> patch) 
+        {
             var todo = GetTodo(id);
 
             if (todo == null)
                 return NotFound();
 
-            var todoToPatch = mapper.Map<Todo, TodoUpdateDTO>(todo);
+            var todoToPatch = _mapper.Map<Todo, TodoUpdateDTO>(todo);
             patch.ApplyTo(todoToPatch, ModelState);
             if (!TryValidateModel(todoToPatch))
                 return ValidationProblem(ModelState);
 
-            mapper.Map<TodoUpdateDTO, Todo>(todoToPatch, todo);
-            todosRepository.SaveChanges();
+            _mapper.Map<TodoUpdateDTO, Todo>(todoToPatch, todo);
+            _todosRepository.SaveChanges();
 
             return NoContent();
         }
@@ -139,23 +149,25 @@ namespace RestAPI101_Back.Controllers {
         [HttpDelete(APIRoutes.Todos.Delete)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<TodoReadDTO> DeleteTodo(int id) {
+        public ActionResult<TodoReadDTO> DeleteTodo(int id)
+        {
             var todo = GetTodo(id);
 
             if (todo == null)
                 return NotFound();
             
-            todosRepository.DeleteTodo(todo);
-            todosRepository.SaveChanges();
+            _todosRepository.DeleteTodo(todo);
+            _todosRepository.SaveChanges();
 
-            return Ok(mapper.Map<TodoReadDTO>(todo));
+            return Ok(_mapper.Map<TodoReadDTO>(todo));
         }
         
         // PUT api/todos/reorder/{id}:{newOrder}
         [HttpPut(APIRoutes.Todos.Reorder)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult ReorderTodos(int id, int newOrder) {
+        public ActionResult ReorderTodos(int id, int newOrder) 
+        {
             var user = GetUser();
             var todos = user.Todos?.OrderBy(x => x.Order).ToList();
 
@@ -164,25 +176,26 @@ namespace RestAPI101_Back.Controllers {
             var todo = todos.FirstOrDefault(x => x.Id == id);
             if (todo == null) return NotFound();
             
-            int prevOrder = newOrder > 0 ? 
+            var prevOrder = newOrder > 0 ? 
                 todos[newOrder-1].Order : 0;
-            int nextOrder = newOrder < todos.Count
-                ? todos[newOrder].Order : (todos.Count + 1) * todosRepository.OrderDistance;
-            int deltaOrder = nextOrder - prevOrder;
+            var nextOrder = newOrder < todos.Count
+                ? todos[newOrder].Order : (todos.Count + 1) * _todosRepository.OrderDistance;
+            var deltaOrder = nextOrder - prevOrder;
             
             todo.Order = prevOrder + deltaOrder / 2;
             
             if(deltaOrder <= 2)
-                todosRepository.NormalizeOrderForUser(user);
+                _todosRepository.NormalizeOrderForUser(user);
             
-            todosRepository.SaveChanges();
+            _todosRepository.SaveChanges();
 
             return Ok();
         }
         
         // PUT api/todos/label/{id}:{labelId}
         [HttpPut(APIRoutes.Todos.AddLabel)]
-        public ActionResult AddLabel(int id, int labelId) {
+        public ActionResult AddLabel(int id, int labelId) 
+        {
             var todo = GetTodo(id);
             var label = GetLabel(labelId);
 
@@ -193,14 +206,15 @@ namespace RestAPI101_Back.Controllers {
             
             todo.Labels.Add(label);
 
-            todosRepository.SaveChanges();
+            _todosRepository.SaveChanges();
 
             return Ok();
         }
         
         // DELETE api/todos/label/{id}:{labelId}
         [HttpDelete(APIRoutes.Todos.RemoveLabel)]
-        public ActionResult RemoveLabel(int id, int labelId) {
+        public ActionResult RemoveLabel(int id, int labelId) 
+        {
             var todo = GetTodo(id);
             var label = GetLabel(labelId);
 
@@ -209,20 +223,22 @@ namespace RestAPI101_Back.Controllers {
             
             todo.Labels.Remove(label);
 
-            todosRepository.SaveChanges();
+            _todosRepository.SaveChanges();
 
             return Ok();
         }
 
-        private User GetUser() => usersRepository.GetUserByLogin(User.Identity!.Name);
+        private User GetUser() => _usersRepository.GetUserByLogin(User.Identity!.Name);
         
-        private Todo GetTodo(int id) {
-            var user = usersRepository.GetUserByLogin(User.Identity!.Name);
+        private Todo GetTodo(int id)
+        {
+            var user = _usersRepository.GetUserByLogin(User.Identity!.Name);
             return user.Todos.FirstOrDefault(todo => todo.Id == id);
         }
 
-        private Label GetLabel(int id) {
-            var user = usersRepository.GetUserByLogin(User.Identity!.Name);
+        private Label GetLabel(int id)
+        {
+            var user = _usersRepository.GetUserByLogin(User.Identity!.Name);
             return user.Labels.FirstOrDefault(label => label.Id == id);
         }
     }

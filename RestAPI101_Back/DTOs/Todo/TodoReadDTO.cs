@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace RestAPI101_Back.DTOs {
-    public class TodoReadDTO {
+﻿namespace RestAPI101_Back.DTOs
+{
+    public class TodoReadDTO
+    {
         public int Id { get; set; }
         public int Order { get; set; }
         public bool Done { get; set; }
