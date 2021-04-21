@@ -25,8 +25,7 @@ namespace RestAPI101_Back.Controllers
             this._labelsRepository = labelsRepository;
         }
 
-        // GET api/labels
-        [HttpGet(APIRoutes.Labels.GetAll)]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public ActionResult<IEnumerable<LabelReadDTO>> GetAllLabels()
@@ -42,8 +41,7 @@ namespace RestAPI101_Back.Controllers
             return Ok(mappedLabels);
         }
 
-        // GET api/labels/{id}
-        [HttpGet(APIRoutes.Labels.GetSpecified, Name = nameof(GetLabelById))]
+        [HttpGet("{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<LabelReadDTO> GetLabelById(int id)
@@ -57,8 +55,7 @@ namespace RestAPI101_Back.Controllers
             return Ok(label.ToReadDTO());
         }
 
-        // POST api/labels
-        [HttpPost(APIRoutes.Labels.Create)]
+        [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         public ActionResult CreateLabel(LabelWriteDTO labelDto)
         {
@@ -75,8 +72,7 @@ namespace RestAPI101_Back.Controllers
             return CreatedAtRoute(nameof(GetLabelById), new { Id = readDto.Id }, readDto);
         }
 
-        // PUT api/labels/{id}
-        [HttpPut(APIRoutes.Labels.Update)]
+        [HttpPut("{id:int}")]
         public ActionResult UpdateLabel(int id, LabelWriteDTO labelDto)
         {
             var user = GetUser();
@@ -92,8 +88,7 @@ namespace RestAPI101_Back.Controllers
             return NoContent();
         }
 
-        // DELETE api/labels/{id}
-        [HttpDelete(APIRoutes.Labels.Delete)]
+        [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<LabelReadDTO> DeleteLabel(int id)

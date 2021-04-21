@@ -27,8 +27,7 @@ namespace RestAPI101_Back.Controllers
             this._usersRepository = usersRepository;
         }
 
-        // GET api/todos?mode&labels
-        [HttpGet(APIRoutes.Todos.GetAll)]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public ActionResult<IEnumerable<TodoReadDTO>> GetTodos([FromQuery]int[]? labels = null, [FromQuery]TodoFilterMode mode = TodoFilterMode.Or)
@@ -75,8 +74,7 @@ namespace RestAPI101_Back.Controllers
             return Ok(mappedTodos);
         }
 
-        // GET api/todos/{id}
-        [HttpGet(APIRoutes.Todos.GetSpecified, Name = nameof(GetTodoById))]
+        [HttpGet("{id:int}", Name = nameof(GetTodoById))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<TodoReadDTO> GetTodoById(int id)
@@ -89,8 +87,7 @@ namespace RestAPI101_Back.Controllers
             return Ok(todo.ToReadDTO());
         }
 
-        // POST api/todos/
-        [HttpPost(APIRoutes.Todos.Create)]
+        [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         public ActionResult<TodoReadDTO> CreateTodo(TodoCreateDTO todoCreateDto)
         {
@@ -107,8 +104,7 @@ namespace RestAPI101_Back.Controllers
             return CreatedAtRoute(nameof(GetTodoById), new { Id = readDto.Id }, readDto);
         }
 
-        // PUT api/todos/{id}
-        [HttpPut(APIRoutes.Todos.Update)]
+        [HttpPut("{id:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult UpdateTodo(int id, TodoUpdateDTO todoUpdateDto)
@@ -125,8 +121,7 @@ namespace RestAPI101_Back.Controllers
             return NoContent();
         }
 
-        // PATCH api/todos/{id}
-        [HttpPatch(APIRoutes.Todos.PartialUpdate)]
+        [HttpPatch("{id:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult PartialUpdateTodo(int id, JsonPatchDocument<TodoUpdateDTO> patch)
@@ -147,8 +142,7 @@ namespace RestAPI101_Back.Controllers
             return NoContent();
         }
 
-        // DELETE api/todos/{id}
-        [HttpDelete(APIRoutes.Todos.Delete)]
+        [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<TodoReadDTO> DeleteTodo(int id)
@@ -164,8 +158,7 @@ namespace RestAPI101_Back.Controllers
             return Ok(todo.ToReadDTO());
         }
 
-        // PUT api/todos/reorder/{id}:{newOrder}
-        [HttpPut(APIRoutes.Todos.Reorder)]
+        [HttpPut("reorder/{id:int}:{newOrder:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult ReorderTodos(int id, int newOrder)
@@ -194,8 +187,7 @@ namespace RestAPI101_Back.Controllers
             return Ok();
         }
 
-        // PUT api/todos/label/{id}:{labelId}
-        [HttpPut(APIRoutes.Todos.AddLabel)]
+        [HttpPut("label/{id:int}:{labelId:int}")]
         public ActionResult AddLabel(int id, int labelId)
         {
             var todo = GetTodo(id);
@@ -213,8 +205,7 @@ namespace RestAPI101_Back.Controllers
             return Ok();
         }
 
-        // DELETE api/todos/label/{id}:{labelId}
-        [HttpDelete(APIRoutes.Todos.RemoveLabel)]
+        [HttpDelete("label/{id:int}:{labelId:int}")]
         public ActionResult RemoveLabel(int id, int labelId)
         {
             var todo = GetTodo(id);

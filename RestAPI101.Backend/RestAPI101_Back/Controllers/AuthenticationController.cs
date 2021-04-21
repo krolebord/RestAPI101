@@ -19,7 +19,7 @@ namespace RestAPI101_Back.Controllers
             this._usersService = usersService;
         }
 
-        [HttpPost(APIRoutes.Auth.Login)]
+        [HttpPost("login")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<AuthTokenReadDTO> Login(UserLoginDTO userLogin)
@@ -37,7 +37,7 @@ namespace RestAPI101_Back.Controllers
             return Ok(token.ToReadDTO());
         }
 
-        [HttpPost(APIRoutes.Auth.Register)]
+        [HttpPost("register")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<AuthTokenReadDTO> Register(UserRegisterDTO userRegister)

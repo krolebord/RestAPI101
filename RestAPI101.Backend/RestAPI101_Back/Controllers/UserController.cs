@@ -22,7 +22,7 @@ namespace RestAPI101_Back.Controllers
             this._usersService = usersService;
         }
 
-        [HttpGet(APIRoutes.User.Get)]
+        [HttpGet]
         public ActionResult<UserReadDTO> Get()
         {
             var user = GetUser();
@@ -32,14 +32,14 @@ namespace RestAPI101_Back.Controllers
             return Ok(userDTO);
         }
 
-        [HttpPut(APIRoutes.User.ChangeName)]
+        [HttpPut("username")]
         public ActionResult ChangeUsername(UserChangeNameDTO username)
         {
             _usersService.ChangeUsername(User.Identity!.Name!, username.Username);
             return Ok();
         }
 
-        [HttpPost(APIRoutes.User.ChangePassword)]
+        [HttpPost("password")]
         public ActionResult ChangePassword(UserChangePasswordDTO password)
         {
             var user = GetUser();
@@ -51,7 +51,7 @@ namespace RestAPI101_Back.Controllers
             return Ok();
         }
 
-        [HttpDelete(APIRoutes.User.Delete)]
+        [HttpDelete]
         public ActionResult Delete()
         {
             _usersService.DeleteUser(User.Identity!.Name!);
