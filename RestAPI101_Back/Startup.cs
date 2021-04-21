@@ -6,7 +6,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
-using RestAPI101_Back.Profiles;
 using RestAPI101_Back.Services;
 
 namespace RestAPI101_Back {
@@ -26,18 +25,12 @@ namespace RestAPI101_Back {
 
             services.AddDbContext<RestAppContext>();
 
-            services.AddScoped<IUsersRepository, UsersRepository>();
-            services.AddScoped<ILabelsRepository, LabelsRepository>();
-            services.AddScoped<ITodosRepository, TodosRepository>();
+            services.AddTransient<IUsersRepository, UsersRepository>();
+            services.AddTransient<ILabelsRepository, LabelsRepository>();
+            services.AddTransient<ITodosRepository, TodosRepository>();
 
-            services.AddScoped<IUsersService, UsersService>();
-            services.AddScoped<IAuthenticationService, AuthenticationService>();
-
-            services.AddAutoMapper(
-                typeof(TodosProfile),
-                typeof(UsersProfile),
-                typeof(AuthTokensProfile)
-            );
+            services.AddTransient<IUsersService, UsersService>();
+            services.AddTransient<IAuthenticationService, AuthenticationService>();
 
             AuthOptions authOptions = new(Configuration);
 

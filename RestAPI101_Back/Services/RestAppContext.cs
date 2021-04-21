@@ -8,15 +8,15 @@ namespace RestAPI101_Back.Services
     {
         private readonly IConfiguration _configuration;
 
-        public DbSet<User> Users { get; set; }
-        public DbSet<Label> Labels { get; set; }
-        public DbSet<Todo> Todos { get; set; }
+        public DbSet<User> Users => Set<User>();
+
+        public DbSet<Label> Labels => Set<Label>();
+
+        public DbSet<Todo> Todos => Set<Todo>();
 
         public RestAppContext(DbContextOptions<RestAppContext> options, IConfiguration configuration) : base(options)
         {
             this._configuration = configuration;
-
-            Database.EnsureCreated();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -26,26 +26,11 @@ namespace RestAPI101_Back.Services
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            var userBuilder = modelBuilder.Entity<User>();
-            userBuilder.HasIndex(user => user.Login).IsUnique();
-            userBuilder.HasAlternateKey(user => user.Login);
+            modelBuilder.ApplyConfiguration(new UsersConfiguration());
 
-            var labelBuilder =  modelBuilder.Entity<Label>();
-            labelBuilder.HasIndex(label => label.Name).IsUnique();
-            labelBuilder.HasAlternateKey(label => label.Name);
-            labelBuilder
-                .HasOne(label => label.User)
-                .WithMany(user => user.Labels);
+            modelBuilder.ApplyConfiguration(new LabelsConfiguration());
 
-            var todoBuilder = modelBuilder.Entity<Todo>();
-            todoBuilder
-                .HasOne(todo => todo.User)
-                .WithMany(user => user.Todos)
-                .OnDelete(DeleteBehavior.Cascade);
-            todoBuilder
-                .HasMany(todo => todo.Labels)
-                .WithMany(label => label.Todos)
-                .UsingEntity(entity => entity.ToTable("Todo_Label"));
+            modelBuilder.ApplyConfiguration(new TodosConfiguration());
 
             base.OnModelCreating(modelBuilder);
         }

@@ -12,26 +12,24 @@ namespace RestAPI101_Back.Services
         public UsersRepository(RestAppContext context)
         {
             this._context = context;
-
-            // TODO ???
-            context.Users
-                .Include(user => user.Todos)
-                .ThenInclude(user => user.Labels)
-                .AsSplitQuery()
-                .Load();
         }
 
         public bool SaveChanges() => _context.SaveChanges() >= 0;
 
-        public User GetUserByLogin(string login)
-        {
-            return _context.Users.FirstOrDefault(user => user.Login == login);
-        }
+        public User? GetUserDataByLogin(string login) =>
+            _context.Users.FirstOrDefault(user => user.Login == login);
 
-        public bool LoginOccupied(string login)
-        {
-            return _context.Users.Any(user => user.Login == login);
-        }
+        public User? GetUserByLogin(string login) =>
+            _context.Users
+                .OrderBy(user => user.Id)
+                .Where(user => user.Login == login)
+                .Include(user => user.Todos)
+                .ThenInclude(user => user.Labels)
+                .AsSplitQuery()
+                .FirstOrDefault();
+
+        public bool LoginOccupied(string login) =>
+            _context.Users.Any(user => user.Login == login);
 
         public bool CreateUser(User user)
         {

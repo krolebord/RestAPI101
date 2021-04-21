@@ -1,5 +1,4 @@
 ﻿using System;
-using AutoMapper;
 using RestAPI101_Back.DTOs;
 using RestAPI101_Back.Models;
 
@@ -8,17 +7,15 @@ namespace RestAPI101_Back.Services
     public class UsersService : IUsersService
     {
         private readonly IUsersRepository _usersRepository;
-        private readonly IMapper _mapper;
 
-        public UsersService(IUsersRepository usersRepository, IMapper mapper)
+        public UsersService(IUsersRepository usersRepository)
         {
             this._usersRepository = usersRepository;
-            this._mapper = mapper;
         }
 
         public ServiceResponse<User> Login(UserLoginDTO userLogin)
         {
-            var user = _usersRepository.GetUserByLogin(userLogin.Login);
+            var user = _usersRepository.GetUserDataByLogin(userLogin.Login);
 
             if (user == null)
                 return new ServiceErrorResponse<User>("Incorrect login");
@@ -37,7 +34,7 @@ namespace RestAPI101_Back.Services
             if (string.IsNullOrWhiteSpace(userRegister.Login))
                 return new ServiceErrorResponse<User>("Invalid login");
 
-            var user = _mapper.Map<User>(userRegister);
+            var user = userRegister.ToUser();
 
             if (!_usersRepository.CreateUser(user))
                 return new ServiceErrorResponse<User>("Login already occupied");
@@ -49,7 +46,7 @@ namespace RestAPI101_Back.Services
 
         public void ChangeUsername(string login, string newUsername)
         {
-            var user = _usersRepository.GetUserByLogin(login);
+            var user = _usersRepository.GetUserDataByLogin(login);
 
             if (user == null)
                 throw new ArgumentException(nameof(login));
@@ -60,7 +57,7 @@ namespace RestAPI101_Back.Services
 
         public void ChangePassword(string login, string newPassword)
         {
-            var user = _usersRepository.GetUserByLogin(login);
+            var user = _usersRepository.GetUserDataByLogin(login);
 
             if (user == null)
                 throw new ArgumentException(nameof(login));
@@ -71,7 +68,7 @@ namespace RestAPI101_Back.Services
 
         public void DeleteUser(string login)
         {
-            var user = _usersRepository.GetUserByLogin(login);
+            var user = _usersRepository.GetUserDataByLogin(login);
 
             if (user == null)
                 throw new ArgumentException(nameof(login));

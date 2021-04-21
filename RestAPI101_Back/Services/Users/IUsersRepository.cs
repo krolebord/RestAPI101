@@ -4,7 +4,8 @@ namespace RestAPI101_Back.Services
 {
     public interface IUsersRepository : IRepository
     {
-        public User GetUserByLogin(string login);
+        public User? GetUserDataByLogin(string login);
+        public User? GetUserByLogin(string login);
 
         public bool LoginOccupied(string login);
 

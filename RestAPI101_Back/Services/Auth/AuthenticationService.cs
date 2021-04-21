@@ -35,10 +35,7 @@ namespace RestAPI101_Back.Services
             );
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
 
-            return new AuthToken {
-                Token = encodedJwt,
-                Expires = expires
-            };
+            return new AuthToken (encodedJwt, expires);
         }
     }
 }

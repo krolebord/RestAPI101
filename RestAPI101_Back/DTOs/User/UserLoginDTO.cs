@@ -4,9 +4,15 @@ namespace RestAPI101_Back.DTOs
 {
     public class UserLoginDTO
     {
-        [Required(ErrorMessage = "Login must be specified")]
-        public string Login { get; set; }
-        [Required(ErrorMessage = "Password must be specified")]
-        public string Password { get; set; }
+        [Required]
+        public string Login { get; }
+        [Required]
+        public string Password { get; }
+
+        public UserLoginDTO(string login, string password)
+        {
+            Login = login;
+            Password = password;
+        }
     }
 }

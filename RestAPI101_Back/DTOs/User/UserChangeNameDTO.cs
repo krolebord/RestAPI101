@@ -2,6 +2,10 @@
 {
     public class UserChangeNameDTO
     {
-        public string Username { get; set; }
+        public string Username { get; }
+
+        public UserChangeNameDTO(string username) {
+            Username = username;
+        }
     }
 }

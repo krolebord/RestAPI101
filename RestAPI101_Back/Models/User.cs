@@ -1,25 +1,63 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace RestAPI101_Back.Models
 {
-    [Table("Users")]
     public class User
     {
-        [Key]
-        public int Id { get; set; }
+        public int Id { get; }
 
-        [Required, MinLength(6), MaxLength(32)]
         public string Login { get; set; }
 
-        [Required, MinLength(8), MaxLength(32)]
         public string Password { get; set; }
 
-        [Required]
         public string Username { get; set; }
 
-        public List<Todo> Todos { get; } = new ();
-        public HashSet<Label> Labels { get; } = new ();
+        public List<Todo> Todos { get; }
+
+        public HashSet<Label> Labels { get; }
+
+        public User(int id, string login, string password, string username)
+        {
+            Id = id;
+            Login = login;
+            Password = password;
+            Username = username;
+            Todos = new List<Todo>();
+            Labels = new HashSet<Label>();
+        }
+
+        public User(string login, string password, string username)
+        {
+            Id = 0;
+            Login = login;
+            Password = password;
+            Username = username;
+            Todos = new List<Todo>();
+            Labels = new HashSet<Label>();
+        }
+    }
+
+    public class UsersConfiguration : IEntityTypeConfiguration<User>
+    {
+        public void Configure(EntityTypeBuilder<User> builder)
+        {
+            builder.ToTable("Users");
+
+            builder.HasKey(user => user.Id);
+
+            builder
+                .Property(user => user.Login)
+                .HasMaxLength(32);
+
+            builder
+                .HasIndex(user => user.Login)
+                .IsUnique();
+
+            builder
+                .Property(user => user.Password)
+                .HasMaxLength(32);
+        }
     }
 }

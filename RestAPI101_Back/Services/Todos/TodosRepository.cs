@@ -38,7 +38,7 @@ namespace RestAPI101_Back.Services
         {
             var todos = user.Todos;
 
-            if (todos == null || !todos.Any())
+            if (!todos.Any())
                 return;
 
             todos = todos.OrderBy(x => x.Order).ToList();

@@ -19,14 +19,14 @@ namespace RestAPI101_Back.Services
             if (label.User == null)
                 throw new ArgumentNullException(nameof(label), "User is null");
 
-            _context.Add(label);
+            _context.Labels.Add(label);
         }
 
         public void DeleteLabel(Label label) {
             if (label == null)
                 throw new ArgumentNullException(nameof(label));
 
-            _context.Remove(label);
+            _context.Labels.Remove(label);
         }
     }
 }

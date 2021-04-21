@@ -1,20 +1,22 @@
 ﻿namespace RestAPI101_Back.Services
 {
-    public class ServiceResponse<T> where T : class
+    public class ServiceResponse<T>
     {
-        public T value;
+        private T? _value;
 
-        public ServiceResponse(T value)
+        public T Value => _value!;
+
+        public ServiceResponse(T? value)
         {
-            this.value = value;
+            this._value = value;
         }
     }
 
-    public class ServiceErrorResponse<T> : ServiceResponse<T> where T : class
+    public class ServiceErrorResponse<T> : ServiceResponse<T>
     {
         public string errorMessage;
 
-        public ServiceErrorResponse(string errorMessage) : base(null)
+        public ServiceErrorResponse(string errorMessage) : base(default)
         {
             this.errorMessage = errorMessage;
         }

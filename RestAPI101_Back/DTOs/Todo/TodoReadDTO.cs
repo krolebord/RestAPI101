@@ -1,4 +1,8 @@
-﻿namespace RestAPI101_Back.DTOs
+﻿using System.Collections.Generic;
+using System.Linq;
+using RestAPI101_Back.Models;
+
+namespace RestAPI101_Back.DTOs
 {
     public class TodoReadDTO
     {
@@ -7,6 +11,23 @@
         public bool Done { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public int[] Labels { get; set; }
+        public List<int> Labels { get; set; }
+
+        public TodoReadDTO(int id, int order, bool done, string title, string description, List<int> labels)
+        {
+            Id = id;
+            Order = order;
+            Done = done;
+            Title = title;
+            Description = description;
+            Labels = labels;
+        }
+    }
+
+    public static class TodoReadDTOMapper
+    {
+        public static TodoReadDTO ToReadDTO(this Todo todo) =>
+            new TodoReadDTO(todo.Id, todo.Order, todo.Done, todo.Title, todo.Description,
+                todo.Labels.Select(label => label.Id).ToList());
     }
 }
