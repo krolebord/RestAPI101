@@ -22,7 +22,7 @@ namespace RestAPI101.Data.Context
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql(_configuration.GetConnectionString("TodosConnection"));
+            optionsBuilder.UseNpgsql(_configuration.GetConnectionString("PostgresConnection"));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

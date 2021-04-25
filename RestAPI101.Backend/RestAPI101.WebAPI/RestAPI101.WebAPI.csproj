@@ -11,13 +11,10 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="5.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.4">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.5">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Npgsql" Version="5.0.3" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.1" />
   </ItemGroup>
 
@@ -25,6 +22,10 @@
     <ProjectReference Include="..\RestAPI101.ApplicationServices\RestAPI101.ApplicationServices.csproj" />
     <ProjectReference Include="..\RestAPI101.Data\RestAPI101.Data.csproj" />
     <ProjectReference Include="..\RestAPI101.Domain\RestAPI101.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="dbconnection.json" />
   </ItemGroup>
 
 </Project>

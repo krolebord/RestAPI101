@@ -6,12 +6,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using RestAPI101.Data.RepositoryExtensions;
-using RestAPI101.Domain.DTOs;
 using RestAPI101.Domain.DTOs.Todo;
 using RestAPI101.Domain.Models;
 using RestAPI101.Domain.Services;
 using RestAPI101.WebAPI.Filters;
-using RestAPI101.WebAPI.Services;
 
 namespace RestAPI101.WebAPI.Controllers
 {
@@ -29,6 +27,8 @@ namespace RestAPI101.WebAPI.Controllers
             this._todosRepository = todosRepository;
             this._usersRepository = usersRepository;
         }
+
+        public enum TodoFilterMode { Or, And }
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]

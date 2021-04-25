@@ -17,12 +17,13 @@ namespace RestAPI101.WebAPI {
     public class Startup {
         private IConfiguration Configuration { get; }
 
-        public Startup(IConfiguration configuration) {
-            var builder = new ConfigurationBuilder()
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = new ConfigurationBuilder()
                 .AddConfiguration(configuration)
-                .AddJsonFile("appsecrets.json");
-
-            Configuration = builder.Build();
+                .AddJsonFile("appsecrets.json")
+                .AddJsonFile("dbconnection.json")
+                .Build();
         }
 
         public void ConfigureServices(IServiceCollection services) {

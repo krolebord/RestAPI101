@@ -3,6 +3,6 @@ obj/
 /packages/
 riderModule.iml
 /_ReSharper.Caches/
-RestAPI101.Backend/RestAPI101_Back/appsecrets.json
-RestAPI101.Backend/RestAPI101_Back/_TODOs.cs
+RestAPI101.Backend/RestAPI101.WebAPI/appsecrets.json
 .editorconfig
+RestAPI101.Backend/RestAPI101.Data/dbconnection.json

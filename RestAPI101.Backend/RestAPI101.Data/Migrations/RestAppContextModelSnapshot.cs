@@ -33,7 +33,7 @@ namespace RestAPI101.Data.Migrations
                     b.ToTable("Todo_Label");
                 });
 
-            modelBuilder.Entity("RestAPI101.Domain.Models.Label", b =>
+            modelBuilder.Entity("RestAPI101.Data.Entities.Label", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -62,7 +62,7 @@ namespace RestAPI101.Data.Migrations
                     b.ToTable("Labels");
                 });
 
-            modelBuilder.Entity("RestAPI101.Domain.Models.Todo", b =>
+            modelBuilder.Entity("RestAPI101.Data.Entities.Todo", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -93,7 +93,7 @@ namespace RestAPI101.Data.Migrations
                     b.ToTable("Todos");
                 });
 
-            modelBuilder.Entity("RestAPI101.Domain.Models.User", b =>
+            modelBuilder.Entity("RestAPI101.Data.Entities.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -124,22 +124,22 @@ namespace RestAPI101.Data.Migrations
 
             modelBuilder.Entity("LabelTodo", b =>
                 {
-                    b.HasOne("RestAPI101.Domain.Models.Label", null)
+                    b.HasOne("RestAPI101.Data.Entities.Label", null)
                         .WithMany()
                         .HasForeignKey("LabelsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RestAPI101.Domain.Models.Todo", null)
+                    b.HasOne("RestAPI101.Data.Entities.Todo", null)
                         .WithMany()
                         .HasForeignKey("TodosId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("RestAPI101.Domain.Models.Label", b =>
+            modelBuilder.Entity("RestAPI101.Data.Entities.Label", b =>
                 {
-                    b.HasOne("RestAPI101.Domain.Models.User", "User")
+                    b.HasOne("RestAPI101.Data.Entities.User", "User")
                         .WithMany("Labels")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -148,9 +148,9 @@ namespace RestAPI101.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("RestAPI101.Domain.Models.Todo", b =>
+            modelBuilder.Entity("RestAPI101.Data.Entities.Todo", b =>
                 {
-                    b.HasOne("RestAPI101.Domain.Models.User", "User")
+                    b.HasOne("RestAPI101.Data.Entities.User", "User")
                         .WithMany("Todos")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -159,7 +159,7 @@ namespace RestAPI101.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("RestAPI101.Domain.Models.User", b =>
+            modelBuilder.Entity("RestAPI101.Data.Entities.User", b =>
                 {
                     b.Navigation("Labels");
 

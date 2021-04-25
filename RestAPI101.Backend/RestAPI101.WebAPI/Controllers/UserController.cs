@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RestAPI101.Data.RepositoryExtensions;
-using RestAPI101.Domain.DTOs;
 using RestAPI101.Domain.DTOs.User;
 using RestAPI101.Domain.Models;
 using RestAPI101.Domain.Services;
 using RestAPI101.WebAPI.Filters;
-using RestAPI101.WebAPI.Services;
 
 namespace RestAPI101.WebAPI.Controllers
 {
