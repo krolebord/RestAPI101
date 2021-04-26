@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <AssemblyName>RestAPI101.WebAPI</AssemblyName>
     <RootNamespace>RestAPI101.WebAPI</RootNamespace>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
   <ItemGroup>
