@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Threading.Tasks;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using RestAPI101.Data.RepositoryExtensions;
+using RestAPI101.ApplicationServices.Requests.Users;
 using RestAPI101.Domain.DTOs.User;
-using RestAPI101.Domain.Models;
-using RestAPI101.Domain.Services;
 using RestAPI101.WebAPI.Filters;
 
 namespace RestAPI101.WebAPI.Controllers
@@ -14,52 +15,55 @@ namespace RestAPI101.WebAPI.Controllers
     [TypeFilter(typeof(UserExists))]
     public class UserController : ControllerBase
     {
-        private readonly IRepository<User> _usersRepository;
-        private readonly IUsersService _usersService;
+        private readonly IMediator _mediator;
 
-        public UserController(IRepository<User> usersRepository, IUsersService usersService)
+        public UserController(IMediator mediator)
         {
-            this._usersRepository = usersRepository;
-            this._usersService = usersService;
+            _mediator = mediator;
         }
 
         [HttpGet]
-        public ActionResult<UserReadDTO> Get()
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<UserReadDTO>> Get()
         {
-            var user = GetUser();
+            var request = new GetUserQuery(User.Identity?.Name);
+            var response = await _mediator.Send(request);
 
-            var userDTO = user.ToReadDTO();
-
-            return Ok(userDTO);
+            return Ok(response);
         }
 
         [HttpPut("username")]
-        public ActionResult ChangeUsername(UserChangeNameDTO username)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult> ChangeUsername(UserChangeNameDTO username)
         {
-            _usersService.ChangeUsername(User.Identity!.Name!, username.Username);
+            var request = new ChangeUsernameCommand(User.Identity?.Name, username);
+            await _mediator.Send(request);
+
             return Ok();
         }
 
         [HttpPost("password")]
-        public ActionResult ChangePassword(UserChangePasswordDTO password)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> ChangePassword(UserChangePasswordDTO password)
         {
-            var user = GetUser();
+            var request = new ChangePasswordCommand(User.Identity?.Name, password);
+            var response = await _mediator.Send(request);
 
-            if (user.Password != password.OldPassword)
-                return BadRequest("Wrong password");
-
-            _usersService.ChangePassword(user.Login, password.NewPassword);
-            return Ok();
+            return response.Match<ActionResult>(
+                ok => Ok(),
+                invalidCredentials => BadRequest("Invalid old password")
+            );
         }
 
         [HttpDelete]
-        public ActionResult Delete()
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public async Task<ActionResult> Delete()
         {
-            _usersService.DeleteUser(User.Identity!.Name!);
-            return Ok();
-        }
+            var request = new DeleteUserCommand(User.Identity?.Name);
+            await _mediator.Send(request);
 
-        private User GetUser() =>
-            _usersRepository.GetUserDataByLogin(User.Identity!.Name!)!;
+            return NoContent();
+        }
     }
 }

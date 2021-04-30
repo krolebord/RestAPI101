@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 
-namespace RestAPI101.Domain.Models
+namespace RestAPI101.Domain.Entities
 {
     public class User : IEntity
     {
-        public int Id { get; set; }
+        public int Id { get; }
 
-        public string Login { get; set; }
+        public string Login { get; }
 
         public string Password { get; set; }
 
@@ -28,7 +28,7 @@ namespace RestAPI101.Domain.Models
 
         public User(string login, string password, string username)
         {
-            Id = 0;
+            Id = default;
             Login = login;
             Password = password;
             Username = username;

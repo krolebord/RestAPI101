@@ -6,8 +6,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RestAPI101.Data\RestAPI101.Data.csproj" />
     <ProjectReference Include="..\RestAPI101.Domain\RestAPI101.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="9.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="5.0.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.5" />
+    <PackageReference Include="OneOf" Version="3.0.178" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="RepositoryExtensions" />
   </ItemGroup>
 
 </Project>

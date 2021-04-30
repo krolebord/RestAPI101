@@ -25,7 +25,7 @@ namespace RestAPI101.Domain.DTOs.Todo
 
     public static class TodoReadDTOMapper
     {
-        public static TodoReadDTO ToReadDTO(this Models.Todo todo) =>
+        public static TodoReadDTO ToReadDTO(this Entities.Todo todo) =>
             new TodoReadDTO(todo.Id, todo.Order, todo.Done, todo.Title, todo.Description,
                 todo.Labels.Select(label => label.Id).ToList());
     }

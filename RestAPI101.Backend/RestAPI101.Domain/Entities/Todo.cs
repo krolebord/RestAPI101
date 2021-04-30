@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 
-namespace RestAPI101.Domain.Models
+namespace RestAPI101.Domain.Entities
 {
     public class Todo : IEntity
     {
-        public int Id { get; set; }
+        public int Id { get; }
 
         public int Order { get; set; }
 
@@ -14,27 +14,31 @@ namespace RestAPI101.Domain.Models
 
         public string Description { get; set; }
 
+        public string UserLogin { get; set; }
+
         public User? User { get; set; }
 
         public HashSet<Label> Labels { get; }
 
-        public Todo(int id, int order, bool done, string title, string description)
+        public Todo(int id, int order, bool done, string title, string description, string userLogin)
         {
             Id = id;
             Order = order;
             Done = done;
             Title = title;
             Description = description;
+            UserLogin = userLogin;
             Labels = new HashSet<Label>();
         }
 
         public Todo(bool done, string title, string description)
         {
-            Id = 0;
-            Order = 0;
+            Id = default;
+            Order = default;
             Done = done;
             Title = title;
             Description = description;
+            UserLogin = "";
             Labels = new HashSet<Label>();
         }
     }

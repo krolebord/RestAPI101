@@ -1,3 +1,5 @@
+using System;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -7,11 +9,12 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
 using RestAPI101.ApplicationServices.Services;
-using RestAPI101.Data;
 using RestAPI101.Data.Context;
-using RestAPI101.Domain.Models;
+using RestAPI101.Data.Repositories;
+using RestAPI101.Domain.Entities;
 using RestAPI101.Domain.Services;
 using RestAPI101.WebAPI.Configurations;
+using RestAPI101.WebAPI.Extensions;
 
 namespace RestAPI101.WebAPI {
     public class Startup {
@@ -31,12 +34,14 @@ namespace RestAPI101.WebAPI {
 
             services.AddDbContext<RestAppContext>();
 
-            services.AddTransient<IRepository<User>, Repository<User>>();
-            services.AddTransient<IRepository<Label>, Repository<Label>>();
-            services.AddTransient<IRepository<Todo>, Repository<Todo>>();
+            services.AddRepository<User, IUsersRepository, UsersRepository>();
+            services.AddRepository<Label, Repository<Label>>();
+            services.AddRepository<Todo, Repository<Todo>>();
 
             services.AddTransient<IUsersService, UsersService>();
             services.AddTransient<IAuthenticationService, AuthenticationService>();
+
+            services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
 
             AuthOptions authOptions = new AuthOptions(
                 Configuration["AuthOptions:SecretKey"],

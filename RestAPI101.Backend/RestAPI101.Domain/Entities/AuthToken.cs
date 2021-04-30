@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace RestAPI101.Domain.Models
+namespace RestAPI101.Domain.Entities
 {
     public class AuthToken
     {

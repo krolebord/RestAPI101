@@ -18,7 +18,7 @@
 
     public static class LabelReadDTOMapper
     {
-        public static LabelReadDTO ToReadDTO(this Models.Label label) =>
+        public static LabelReadDTO ToReadDTO(this Entities.Label label) =>
             new LabelReadDTO(label.Id, label.Name, label.Description, label.Color);
     }
 }

@@ -1,43 +1,21 @@
-﻿using RestAPI101.Domain.DTOs.User;
-using RestAPI101.Domain.Models;
+﻿using System.Threading.Tasks;
+using OneOf;
+using RestAPI101.Domain.DTOs.User;
+using RestAPI101.Domain.Entities;
+using RestAPI101.Domain.ServiceResponses;
 
 namespace RestAPI101.Domain.Services
 {
     public interface IUsersService
     {
-        public UsersServiceResponse Login(UserLoginDTO userLogin);
+        public Task<OneOf<User, InvalidCredentials>> Login(UserLoginDTO userLogin);
 
-        public UsersServiceResponse RegisterUser(UserRegisterDTO userRegister);
+        public Task<OneOf<Ok, LoginOccupied>> RegisterUser(UserRegisterDTO userRegister);
 
-        public void ChangeUsername(string login, string newUsername);
+        public Task ChangeUsername(string login, string newUsername);
 
-        public void ChangePassword(string login, string newPassword);
+        public Task<OneOf<Ok, InvalidCredentials>> ChangePassword(string login, string oldPassword, string newPassword);
 
-        public void DeleteUser(string login);
-    }
-
-    public class UsersServiceResponse
-    {
-        private User? _user;
-
-        public bool Success { get; }
-
-        public User User => _user!;
-
-        public string ErrorMessage { get; }
-
-        public UsersServiceResponse(User user)
-        {
-            this.Success = true;
-            this._user = user;
-            this.ErrorMessage = "";
-        }
-
-        public UsersServiceResponse(string errorMessage)
-        {
-            this.Success = false;
-            this._user = null;
-            this.ErrorMessage = errorMessage;
-        }
+        public Task DeleteUser(string login);
     }
 }

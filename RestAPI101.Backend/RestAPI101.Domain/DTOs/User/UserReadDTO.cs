@@ -18,7 +18,7 @@ namespace RestAPI101.Domain.DTOs.User
 
     public static class UserReadDTOMapper
     {
-        public static UserReadDTO ToReadDTO(this Models.User user) =>
+        public static UserReadDTO ToReadDTO(this Entities.User user) =>
             new UserReadDTO(user.Login, user.Username);
     }
 }

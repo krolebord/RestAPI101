@@ -1,7 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using RestAPI101.Data.EntityConfigurations;
-using RestAPI101.Domain.Models;
+using RestAPI101.Domain.Entities;
 
 namespace RestAPI101.Data.Context
 {
@@ -22,7 +23,11 @@ namespace RestAPI101.Data.Context
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql(_configuration.GetConnectionString("PostgresConnection"));
+            optionsBuilder.UseNpgsql(
+                _configuration.GetConnectionString("PostgresConnection"),
+                options => options.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)
+            );
+            optionsBuilder.LogTo(Console.WriteLine, new[] {"Microsoft.EntityFrameworkCore.Database.Command"});
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

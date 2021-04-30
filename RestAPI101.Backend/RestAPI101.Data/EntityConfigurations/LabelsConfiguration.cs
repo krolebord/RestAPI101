@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using RestAPI101.Domain.Models;
+using RestAPI101.Domain.Entities;
 
 namespace RestAPI101.Data.EntityConfigurations
 {
@@ -19,6 +19,8 @@ namespace RestAPI101.Data.EntityConfigurations
             builder
                 .HasOne(label => label.User)
                 .WithMany(user => user!.Labels)
+                .HasForeignKey(label => label.UserLogin)
+                .HasPrincipalKey(user => user!.Login)
                 .IsRequired();
         }
     }

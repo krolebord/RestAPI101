@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using RestAPI101.Data.RepositoryExtensions;
+using RestAPI101.ApplicationServices.Requests.Labels;
 using RestAPI101.Domain.DTOs.Label;
-using RestAPI101.Domain.Models;
-using RestAPI101.Domain.Services;
 using RestAPI101.WebAPI.Filters;
 
 namespace RestAPI101.WebAPI.Controllers
@@ -17,96 +17,82 @@ namespace RestAPI101.WebAPI.Controllers
     [TypeFilter(typeof(UserExists))]
     public class LabelsController : ControllerBase
     {
-        private readonly IRepository<User> _usersRepository;
-        private readonly IRepository<Label> _labelsRepository;
+        private readonly IMediator _mediator;
 
-        public LabelsController(IRepository<Label> labelsRepository, IRepository<User> usersRepository)
+        public LabelsController(IMediator mediator)
         {
-            this._usersRepository = usersRepository;
-            this._labelsRepository = labelsRepository;
+            _mediator = mediator;
         }
+
+        #region Queries
 
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public ActionResult<IEnumerable<LabelReadDTO>> GetAllLabels()
+        public async Task<ActionResult<IEnumerable<LabelReadDTO>>> GetAllLabels()
         {
-            var user = _usersRepository.GetUserByLogin(User.Identity!.Name!)!;
+            var request = new GetAllLabelsQuery(User.Identity?.Name);
+            var response = await _mediator.Send(request);
 
-            var labels = user.Labels;
-
-            if (!labels.Any())
-                return NoContent();
-
-            var mappedLabels = labels.Select(label => label.ToReadDTO());
-            return Ok(mappedLabels);
+            return response.Any() ? Ok(response) : NoContent();
         }
 
         [HttpGet("{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<LabelReadDTO> GetLabelById(int id)
+        public async Task<ActionResult<LabelReadDTO>> GetLabelById(int id)
         {
-            var user = GetUser();
-            var label = user.Labels.FirstOrDefault(x => x.Id == id);
+            var request = new GetSpecifiedLabelQuery(User.Identity?.Name, id);
+            var response = await _mediator.Send(request);
 
-            if(label == null)
-                return NotFound();
-
-            return Ok(label.ToReadDTO());
+            return response.Match<ActionResult<LabelReadDTO>>(
+                labelDto => Ok(labelDto),
+                notFound => NotFound()
+            );
         }
+
+        #endregion
+
+        #region Commands
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        public ActionResult CreateLabel(LabelWriteDTO labelDto)
+        public async Task<ActionResult> CreateLabel(LabelCreateDTO labelDto)
         {
-            var user = GetUser();
-            var label = labelDto.ToLabel();
-            label.User = user;
-            _labelsRepository.Add(label);
+            var request = new CreateLabelCommand(User.Identity?.Name, labelDto);
+            var readDto = await _mediator.Send(request);
 
-            _labelsRepository.SaveChanges();
-
-            var readDto = label.ToReadDTO();
-
-            // ReSharper disable once RedundantAnonymousTypePropertyName
             return CreatedAtRoute(nameof(GetLabelById), new { Id = readDto.Id }, readDto);
         }
 
         [HttpPut("{id:int}")]
-        public ActionResult UpdateLabel(int id, LabelWriteDTO labelDto)
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult> UpdateLabel(int id, LabelUpdateDTO labelDto)
         {
-            var user = GetUser();
-            var label = user.Labels.FirstOrDefault(x => x.Id == id);
+            var request = new UpdateLabelCommand(User.Identity?.Name, id, labelDto);
+            var response = await _mediator.Send(request);
 
-            if (label == null)
-                return NotFound();
-
-            label.MapWriteDTO(labelDto);
-
-            _labelsRepository.SaveChanges();
-
-            return NoContent();
+            return response.Match<ActionResult>(
+                ok => NoContent(),
+                notFound => NotFound()
+            );
         }
 
         [HttpDelete("{id:int}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<LabelReadDTO> DeleteLabel(int id)
+        public async Task<ActionResult> DeleteLabel(int id)
         {
-            var user = GetUser();
-            var label = user.Labels.FirstOrDefault(x => x.Id == id);
+            var request = new DeleteLabelCommand(User.Identity?.Name, id);
+            var response = await _mediator.Send(request);
 
-            if (label == null)
-                return NotFound();
-
-            _labelsRepository.Delete(label);
-            _labelsRepository.SaveChanges();
-
-            return Ok(label.ToReadDTO());
+            return response.Match<ActionResult>(
+                ok => NoContent(),
+                notFound => NotFound()
+            );
         }
 
-        private User GetUser() =>
-            _usersRepository.GetUserByLogin(User.Identity!.Name!)!;
+        #endregion
     }
 }

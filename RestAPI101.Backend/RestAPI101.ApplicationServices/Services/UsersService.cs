@@ -1,65 +1,77 @@
 ﻿using System;
-using RestAPI101.Data.RepositoryExtensions;
+using System.Threading.Tasks;
+using OneOf;
 using RestAPI101.Domain.DTOs.User;
-using RestAPI101.Domain.Models;
+using RestAPI101.Domain.Entities;
+using RestAPI101.Domain.ServiceResponses;
 using RestAPI101.Domain.Services;
 
 namespace RestAPI101.ApplicationServices.Services
 {
     public class UsersService : IUsersService
     {
-        private readonly IRepository<User> _usersRepository;
+        private readonly IUsersRepository _usersRepository;
 
-        public UsersService(IRepository<User> usersRepository)
+        public UsersService(IUsersRepository usersRepository)
         {
             this._usersRepository = usersRepository;
         }
 
-        public UsersServiceResponse Login(UserLoginDTO userLogin)
+        public async Task<OneOf<User, InvalidCredentials>> Login(UserLoginDTO userLogin)
         {
-            var user = _usersRepository.GetUserDataByLogin(userLogin.Login);
-
-            if (user == null)
-                return new UsersServiceResponse("Incorrect login");
+            var user = await _usersRepository.GetAsync(user => user.Login == userLogin.Login);
 
             // TODO Hash passwords
-            if (user.Password != userLogin.Password)
-                return new UsersServiceResponse("Incorrect password");
+            if (user == null || user.Password != userLogin.Password)
+                return new InvalidCredentials();
 
-            return new UsersServiceResponse(user);
+            return user;
         }
 
-        public UsersServiceResponse RegisterUser(UserRegisterDTO userRegister)
+        public async Task<OneOf<Ok, LoginOccupied>> RegisterUser(UserRegisterDTO userRegister)
         {
             var user = userRegister.ToUser();
 
-            if (_usersRepository.LoginOccupied(userRegister.Login))
-                return new UsersServiceResponse("Login already occupied");
+            if (await _usersRepository.LoginOccupied(userRegister.Login))
+                return new LoginOccupied();
 
             _usersRepository.Add(user);
-            _usersRepository.SaveChanges();
+            await _usersRepository.SaveChangesAsync();
 
-            return new UsersServiceResponse(user);
+            return new Ok();
         }
 
-        public void ChangeUsername(string login, string newUsername) =>
+        public Task ChangeUsername(string login, string newUsername) =>
             UpdateUser(login, user => user.Username = newUsername);
 
-        public void ChangePassword(string login, string newPassword) =>
-            UpdateUser(login, user => user.Password = newPassword);
+        public async Task<OneOf<Ok, InvalidCredentials>> ChangePassword(string login, string oldPassword, string newPassword)
+        {
+            var user = await _usersRepository.GetAsync(user => user.Login == login);
 
-        public void DeleteUser(string login) =>
+            if (user == null)
+                throw new ArgumentException(null, nameof(login));
+
+            if (user.Password != oldPassword)
+                return new InvalidCredentials();
+
+            await UpdateUser(login, user => user.Password = newPassword);
+
+            return new Ok();
+        }
+
+
+        public Task DeleteUser(string login) =>
             UpdateUser(login, user => _usersRepository.Delete(user));
 
-        private void UpdateUser(string login, Action<User> updateAction)
+        private async Task UpdateUser(string login, Action<User> updateAction)
         {
-            var user = _usersRepository.GetUserDataByLogin(login);
+            var user = await _usersRepository.GetAsync(user => user.Login == login);
 
             if (user == null)
                 throw new ArgumentException(null, nameof(login));
 
             updateAction(user);
-            _usersRepository.SaveChanges();
+            await _usersRepository.SaveChangesAsync();
         }
     }
 }

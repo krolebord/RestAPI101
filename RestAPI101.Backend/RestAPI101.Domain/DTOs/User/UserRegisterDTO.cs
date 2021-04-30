@@ -27,7 +27,7 @@ namespace RestAPI101.Domain.DTOs.User
 
     public static class UserRegisterDTOMapper
     {
-        public static Models.User ToUser(this UserRegisterDTO dto) =>
-            new Models.User(dto.Login, dto.Password, dto.Username);
+        public static Entities.User ToUser(this UserRegisterDTO dto) =>
+            new Entities.User(dto.Login, dto.Password, dto.Username);
     }
 }

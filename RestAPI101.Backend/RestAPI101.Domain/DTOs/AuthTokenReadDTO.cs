@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using RestAPI101.Domain.Models;
+using RestAPI101.Domain.Entities;
 
 namespace RestAPI101.Domain.DTOs
 {

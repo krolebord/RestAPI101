@@ -2,7 +2,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
-using RestAPI101.Domain.Models;
+using RestAPI101.Domain.Entities;
 
 namespace RestAPI101.Domain.Services
 {

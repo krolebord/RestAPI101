@@ -15,7 +15,7 @@ namespace RestAPI101.Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 63)
-                .HasAnnotation("ProductVersion", "5.0.4")
+                .HasAnnotation("ProductVersion", "5.0.5")
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
             modelBuilder.Entity("LabelTodo", b =>
@@ -33,7 +33,7 @@ namespace RestAPI101.Data.Migrations
                     b.ToTable("Todo_Label");
                 });
 
-            modelBuilder.Entity("RestAPI101.Data.Entities.Label", b =>
+            modelBuilder.Entity("RestAPI101.Domain.Entities.Label", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -52,17 +52,18 @@ namespace RestAPI101.Data.Migrations
                         .HasMaxLength(16)
                         .HasColumnType("character varying(16)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
+                    b.Property<string>("UserLogin")
+                        .IsRequired()
+                        .HasColumnType("character varying(32)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserLogin");
 
                     b.ToTable("Labels");
                 });
 
-            modelBuilder.Entity("RestAPI101.Data.Entities.Todo", b =>
+            modelBuilder.Entity("RestAPI101.Domain.Entities.Todo", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -83,17 +84,18 @@ namespace RestAPI101.Data.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
+                    b.Property<string>("UserLogin")
+                        .IsRequired()
+                        .HasColumnType("character varying(32)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserLogin");
 
                     b.ToTable("Todos");
                 });
 
-            modelBuilder.Entity("RestAPI101.Data.Entities.User", b =>
+            modelBuilder.Entity("RestAPI101.Domain.Entities.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -124,42 +126,44 @@ namespace RestAPI101.Data.Migrations
 
             modelBuilder.Entity("LabelTodo", b =>
                 {
-                    b.HasOne("RestAPI101.Data.Entities.Label", null)
+                    b.HasOne("RestAPI101.Domain.Entities.Label", null)
                         .WithMany()
                         .HasForeignKey("LabelsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RestAPI101.Data.Entities.Todo", null)
+                    b.HasOne("RestAPI101.Domain.Entities.Todo", null)
                         .WithMany()
                         .HasForeignKey("TodosId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("RestAPI101.Data.Entities.Label", b =>
+            modelBuilder.Entity("RestAPI101.Domain.Entities.Label", b =>
                 {
-                    b.HasOne("RestAPI101.Data.Entities.User", "User")
+                    b.HasOne("RestAPI101.Domain.Entities.User", "User")
                         .WithMany("Labels")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("UserLogin")
+                        .HasPrincipalKey("Login")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("RestAPI101.Data.Entities.Todo", b =>
+            modelBuilder.Entity("RestAPI101.Domain.Entities.Todo", b =>
                 {
-                    b.HasOne("RestAPI101.Data.Entities.User", "User")
+                    b.HasOne("RestAPI101.Domain.Entities.User", "User")
                         .WithMany("Todos")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("UserLogin")
+                        .HasPrincipalKey("Login")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("RestAPI101.Data.Entities.User", b =>
+            modelBuilder.Entity("RestAPI101.Domain.Entities.User", b =>
                 {
                     b.Navigation("Labels");
 

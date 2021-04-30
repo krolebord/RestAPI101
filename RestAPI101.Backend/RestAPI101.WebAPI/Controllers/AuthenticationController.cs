@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System.Threading.Tasks;
+using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using RestAPI101.ApplicationServices.Requests.Authentication;
 using RestAPI101.Domain.DTOs;
 using RestAPI101.Domain.DTOs.User;
-using RestAPI101.Domain.Services;
 
 namespace RestAPI101.WebAPI.Controllers
 {
@@ -10,46 +12,39 @@ namespace RestAPI101.WebAPI.Controllers
     [Route(APIRoutes.AuthController)]
     public class AuthenticationController : ControllerBase
     {
-        private readonly IAuthenticationService _authenticationService;
-        private readonly IUsersService _usersService;
+        private IMediator _mediator;
 
-        public AuthenticationController(IAuthenticationService authenticationService, IUsersService usersService)
+        public AuthenticationController(IMediator mediator)
         {
-            this._authenticationService = authenticationService;
-            this._usersService = usersService;
+            _mediator = mediator;
         }
 
         [HttpPost("login")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<AuthTokenReadDTO> Login(UserLoginDTO userLogin)
+        public async Task<ActionResult<AuthTokenReadDTO>> Login(UserLoginDTO userLogin)
         {
-            if (!ModelState.IsValid) return BadRequest();
+            var request = new LoginCommand(userLogin);
+            var response = await _mediator.Send(request);
 
-            var response = _usersService.Login(userLogin);
-
-            if(!response.Success)
-                return BadRequest(new { errorText = response.ErrorMessage});
-
-            var user = response.User;
-            var token = _authenticationService.GenerateToken(user);
-
-            return Ok(token.ToReadDTO());
+            return response.Match<ActionResult<AuthTokenReadDTO>>(
+                token => Ok(token),
+                credentials => BadRequest("Invalid credentials")
+            );
         }
 
         [HttpPost("register")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<AuthTokenReadDTO> Register(UserRegisterDTO userRegister)
+        public async Task<ActionResult> Register(UserRegisterDTO userRegister)
         {
-            if (!ModelState.IsValid) return BadRequest();
+            var request = new RegisterCommand(userRegister);
+            var response = await _mediator.Send(request);
 
-            var response = _usersService.RegisterUser(userRegister);
-
-            if(!response.Success)
-                return BadRequest(new { errorText = response.ErrorMessage});
-
-            return Ok();
+            return response.Match<ActionResult>(
+                ok => Ok(),
+                occupied => BadRequest("Login already occupied")
+            );
         }
     }
 }

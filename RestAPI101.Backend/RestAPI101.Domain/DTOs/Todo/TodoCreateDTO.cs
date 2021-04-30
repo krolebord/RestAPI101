@@ -19,7 +19,7 @@ namespace RestAPI101.Domain.DTOs.Todo
 
     public static class TodoCreateDTOMapper
     {
-        public static Models.Todo ToTodo(this TodoCreateDTO dto) =>
-            new Models.Todo(dto.Done, dto.Title, dto.Description);
+        public static Entities.Todo ToTodo(this TodoCreateDTO dto) =>
+            new Entities.Todo(dto.Done, dto.Title, dto.Description);
     }
 }
