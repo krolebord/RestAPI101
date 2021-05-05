@@ -1,4 +1,5 @@
 using System;
+using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -55,6 +56,11 @@ namespace RestAPI101.WebAPI {
             services.AddCors();
 
             services.AddControllers()
+                .AddFluentValidation(options =>
+                {
+                    options.RegisterValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
+                    options.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
+                })
                 .AddNewtonsoftJson(options => options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
 
             services.AddSwaggerGen(options => {

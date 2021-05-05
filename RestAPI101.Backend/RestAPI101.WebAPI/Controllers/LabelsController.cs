@@ -5,8 +5,8 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using RestAPI101.ApplicationServices.DTOs.Label;
 using RestAPI101.ApplicationServices.Requests.Labels;
-using RestAPI101.Domain.DTOs.Label;
 using RestAPI101.WebAPI.Filters;
 
 namespace RestAPI101.WebAPI.Controllers
@@ -40,7 +40,7 @@ namespace RestAPI101.WebAPI.Controllers
         [HttpGet("{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<LabelReadDTO>> GetLabelById(int id)
+        public async Task<ActionResult<LabelReadDTO>> GetLabelById([FromRoute]int id)
         {
             var request = new GetSpecifiedLabelQuery(User.Identity?.Name, id);
             var response = await _mediator.Send(request);
@@ -57,7 +57,7 @@ namespace RestAPI101.WebAPI.Controllers
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        public async Task<ActionResult> CreateLabel(LabelCreateDTO labelDto)
+        public async Task<ActionResult> CreateLabel([FromBody]LabelCreateDTO labelDto)
         {
             var request = new CreateLabelCommand(User.Identity?.Name, labelDto);
             var readDto = await _mediator.Send(request);
@@ -66,9 +66,9 @@ namespace RestAPI101.WebAPI.Controllers
         }
 
         [HttpPut("{id:int}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> UpdateLabel(int id, LabelUpdateDTO labelDto)
+        public async Task<ActionResult> UpdateLabel([FromRoute]int id, [FromBody]LabelUpdateDTO labelDto)
         {
             var request = new UpdateLabelCommand(User.Identity?.Name, id, labelDto);
             var response = await _mediator.Send(request);
@@ -82,7 +82,7 @@ namespace RestAPI101.WebAPI.Controllers
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> DeleteLabel(int id)
+        public async Task<ActionResult> DeleteLabel([FromRoute]int id)
         {
             var request = new DeleteLabelCommand(User.Identity?.Name, id);
             var response = await _mediator.Send(request);

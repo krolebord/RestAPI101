@@ -2,8 +2,9 @@
 using System.Threading.Tasks;
 using MediatR;
 using OneOf;
+using RestAPI101.ApplicationServices.DTOs;
 using RestAPI101.ApplicationServices.Requests.Authentication;
-using RestAPI101.Domain.DTOs;
+using RestAPI101.Domain.Entities;
 using RestAPI101.Domain.ServiceResponses;
 using RestAPI101.Domain.Services;
 
@@ -22,7 +23,9 @@ namespace RestAPI101.ApplicationServices.Handlers.Authentication
 
         public async Task<OneOf<AuthTokenReadDTO, InvalidCredentials>> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
-            var response = await _usersService.Login(request.LoginDTO);
+            var credentials = new LoginCredentials(request.LoginDTO.Login, request.LoginDTO.Password);
+
+            var response = await _usersService.Login(credentials);
 
             return response.Match<OneOf<AuthTokenReadDTO, InvalidCredentials>>(
                 user => _authService.GenerateToken(user).ToReadDTO(),

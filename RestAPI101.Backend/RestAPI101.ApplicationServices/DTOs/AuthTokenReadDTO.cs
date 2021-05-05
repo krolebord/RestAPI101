@@ -1,14 +1,11 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using RestAPI101.Domain.Entities;
 
-namespace RestAPI101.Domain.DTOs
+namespace RestAPI101.ApplicationServices.DTOs
 {
     public class AuthTokenReadDTO
     {
-        [Required]
         public string Token { get; }
-        [Required]
         public DateTime Expires { get; }
 
         public AuthTokenReadDTO(string token, DateTime expires)

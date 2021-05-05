@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using MediatR;
 using OneOf;
+using RestAPI101.ApplicationServices.DTOs.Todo;
 using RestAPI101.ApplicationServices.Requests.Todos;
-using RestAPI101.Domain.DTOs.Todo;
 using RestAPI101.Domain.Entities;
 using RestAPI101.Domain.ServiceResponses;
 using RestAPI101.Domain.Services;

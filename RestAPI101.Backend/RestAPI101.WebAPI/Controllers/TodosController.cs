@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using RestAPI101.ApplicationServices.DTOs.Todo;
 using RestAPI101.ApplicationServices.Requests.Todos;
-using RestAPI101.Domain.DTOs.Todo;
 using RestAPI101.Domain.Enums;
 using RestAPI101.WebAPI.Filters;
 
@@ -42,7 +42,7 @@ namespace RestAPI101.WebAPI.Controllers
         [HttpGet("{id:int}", Name = nameof(GetTodoById))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<TodoReadDTO>> GetTodoById(int id)
+        public async Task<ActionResult<TodoReadDTO>> GetTodoById([FromRoute]int id)
         {
             var request = new GetSpecifiedTodoQuery(User.Identity?.Name, id);
             var response = await _mediator.Send(request);
@@ -59,7 +59,7 @@ namespace RestAPI101.WebAPI.Controllers
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        public async Task<ActionResult<TodoReadDTO>> CreateTodo(TodoCreateDTO todoCreateDto)
+        public async Task<ActionResult<TodoReadDTO>> CreateTodo([FromBody]TodoCreateDTO todoCreateDto)
         {
             var request = new CreateTodoCommand(User.Identity?.Name, todoCreateDto);
             var createdTodo = await _mediator.Send(request);
@@ -70,7 +70,7 @@ namespace RestAPI101.WebAPI.Controllers
         [HttpPut("{id:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> UpdateTodo(int id, TodoUpdateDTO todoUpdateDto)
+        public async Task<ActionResult> UpdateTodo([FromRoute]int id, [FromBody]TodoUpdateDTO todoUpdateDto)
         {
             var request = new UpdateTodoCommand(User.Identity?.Name, id, todoUpdateDto);
             var response = await _mediator.Send(request);
@@ -84,7 +84,7 @@ namespace RestAPI101.WebAPI.Controllers
         [HttpPatch("{id:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> PartialUpdateTodo(int id, JsonPatchDocument<TodoUpdateDTO> patch)
+        public async Task<ActionResult> PartialUpdateTodo([FromRoute]int id, [FromBody]JsonPatchDocument<TodoUpdateDTO> patch)
         {
             var request = new PatchTodoCommand(User.Identity?.Name, id, patch);
             var response = await _mediator.Send(request);
@@ -98,7 +98,7 @@ namespace RestAPI101.WebAPI.Controllers
         [HttpDelete("{id:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> DeleteTodo(int id)
+        public async Task<ActionResult> DeleteTodo([FromRoute]int id)
         {
             var request = new DeleteTodoCommand(User.Identity?.Name, id);
             var response = await _mediator.Send(request);
@@ -112,7 +112,7 @@ namespace RestAPI101.WebAPI.Controllers
         [HttpPut("reorder/{id:int}:{newOrder:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> ReorderTodos(int id, int newOrder)
+        public async Task<ActionResult> ReorderTodos([FromRoute]int id, [FromRoute]int newOrder)
         {
             var request = new ReorderTodoCommand(User.Identity?.Name, id, newOrder);
             var response = await _mediator.Send(request);
@@ -126,7 +126,7 @@ namespace RestAPI101.WebAPI.Controllers
         [HttpPut("label/{id:int}:{labelId:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> AddLabel(int id, int labelId)
+        public async Task<ActionResult> AddLabel([FromRoute]int id, [FromRoute]int labelId)
         {
             var request = new AddLabelTodoCommand(User.Identity?.Name, id, labelId);
             var response = await _mediator.Send(request);
@@ -140,7 +140,7 @@ namespace RestAPI101.WebAPI.Controllers
         [HttpDelete("label/{id:int}:{labelId:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult> RemoveLabel(int id, int labelId)
+        public async Task<ActionResult> RemoveLabel([FromRoute]int id, [FromRoute]int labelId)
         {
             var request = new AddLabelTodoCommand(User.Identity?.Name, id, labelId);
             var response = await _mediator.Send(request);

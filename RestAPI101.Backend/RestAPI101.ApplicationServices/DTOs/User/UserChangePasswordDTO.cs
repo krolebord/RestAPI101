@@ -1,4 +1,6 @@
-﻿namespace RestAPI101.Domain.DTOs.User
+﻿using FluentValidation;
+
+namespace RestAPI101.ApplicationServices.DTOs.User
 {
     public class UserChangePasswordDTO
     {
@@ -9,6 +11,14 @@
         {
             OldPassword = oldPassword;
             NewPassword = newPassword;
+        }
+    }
+
+    public class UserChangePasswordDTOValidator : AbstractValidator<UserChangePasswordDTO>
+    {
+        public UserChangePasswordDTOValidator()
+        {
+            RuleFor(x => x.NewPassword).UserPassword();
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace RestAPI101.Domain.DTOs.Label
+﻿namespace RestAPI101.ApplicationServices.DTOs.Label
 {
     public class LabelReadDTO
     {
@@ -18,7 +18,7 @@
 
     public static class LabelReadDTOMapper
     {
-        public static LabelReadDTO ToReadDTO(this Entities.Label label) =>
+        public static LabelReadDTO ToReadDTO(this Domain.Entities.Label label) =>
             new LabelReadDTO(label.Id, label.Name, label.Description, label.Color);
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace RestAPI101.Domain.DTOs.Label
+﻿using FluentValidation;
+
+namespace RestAPI101.ApplicationServices.DTOs.Label
 {
     public class LabelUpdateDTO
     {
@@ -14,9 +16,19 @@
         }
     }
 
+    public class LabelUpdateDTOValidator : AbstractValidator<LabelUpdateDTO>
+    {
+        public LabelUpdateDTOValidator()
+        {
+            RuleFor(x => x.Name)
+                .NotEmpty()
+                .MaximumLength(16);
+        }
+    }
+
     public static class LabelUpdateDTOMapper
     {
-        public static void MapUpdateDTO(this Entities.Label label, LabelUpdateDTO dto)
+        public static void MapUpdateDTO(this Domain.Entities.Label label, LabelUpdateDTO dto)
         {
             label.Name = dto.Name;
 

@@ -2,9 +2,9 @@
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using RestAPI101.ApplicationServices.DTOs;
+using RestAPI101.ApplicationServices.DTOs.User;
 using RestAPI101.ApplicationServices.Requests.Authentication;
-using RestAPI101.Domain.DTOs;
-using RestAPI101.Domain.DTOs.User;
 
 namespace RestAPI101.WebAPI.Controllers
 {
@@ -22,7 +22,7 @@ namespace RestAPI101.WebAPI.Controllers
         [HttpPost("login")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<AuthTokenReadDTO>> Login(UserLoginDTO userLogin)
+        public async Task<ActionResult<AuthTokenReadDTO>> Login([FromBody]UserLoginDTO userLogin)
         {
             var request = new LoginCommand(userLogin);
             var response = await _mediator.Send(request);
@@ -36,7 +36,7 @@ namespace RestAPI101.WebAPI.Controllers
         [HttpPost("register")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> Register(UserRegisterDTO userRegister)
+        public async Task<ActionResult> Register([FromBody]UserRegisterDTO userRegister)
         {
             var request = new RegisterCommand(userRegister);
             var response = await _mediator.Send(request);

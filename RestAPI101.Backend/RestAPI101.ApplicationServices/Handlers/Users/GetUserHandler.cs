@@ -1,8 +1,8 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using RestAPI101.ApplicationServices.DTOs.User;
 using RestAPI101.ApplicationServices.Requests.Users;
-using RestAPI101.Domain.DTOs.User;
 using RestAPI101.Domain.Entities;
 using RestAPI101.Domain.Services;
 

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using RestAPI101.Domain.DTOs.Todo;
+using RestAPI101.ApplicationServices.DTOs.Todo;
 using RestAPI101.Domain.Enums;
 
 namespace RestAPI101.ApplicationServices.Requests.Todos

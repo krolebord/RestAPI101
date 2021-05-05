@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using RestAPI101.ApplicationServices.Requests.Labels;
-using RestAPI101.Domain.DTOs.Label;
 using RestAPI101.Domain.ServiceResponses;
 using RestAPI101.Domain.Services;
 using OneOf;
+using RestAPI101.ApplicationServices.DTOs.Label;
 using RestAPI101.Domain.Entities;
 
 namespace RestAPI101.ApplicationServices.Handlers.Labels

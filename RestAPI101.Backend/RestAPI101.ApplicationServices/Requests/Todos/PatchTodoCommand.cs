@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.JsonPatch;
 using OneOf;
-using RestAPI101.Domain.DTOs.Todo;
+using RestAPI101.ApplicationServices.DTOs.Todo;
 using RestAPI101.Domain.ServiceResponses;
 
 namespace RestAPI101.ApplicationServices.Requests.Todos

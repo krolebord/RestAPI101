@@ -1,12 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace RestAPI101.Domain.DTOs.User
+﻿namespace RestAPI101.ApplicationServices.DTOs.User
 {
     public class UserReadDTO
     {
-        [Required]
         public string Login { get; }
-        [Required]
+
         public string Username { get; }
 
         public UserReadDTO(string login, string username)
@@ -18,7 +15,7 @@ namespace RestAPI101.Domain.DTOs.User
 
     public static class UserReadDTOMapper
     {
-        public static UserReadDTO ToReadDTO(this Entities.User user) =>
+        public static UserReadDTO ToReadDTO(this Domain.Entities.User user) =>
             new UserReadDTO(user.Login, user.Username);
     }
 }

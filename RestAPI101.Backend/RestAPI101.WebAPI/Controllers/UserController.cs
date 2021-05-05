@@ -3,8 +3,8 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using RestAPI101.ApplicationServices.DTOs.User;
 using RestAPI101.ApplicationServices.Requests.Users;
-using RestAPI101.Domain.DTOs.User;
 using RestAPI101.WebAPI.Filters;
 
 namespace RestAPI101.WebAPI.Controllers
@@ -34,7 +34,7 @@ namespace RestAPI101.WebAPI.Controllers
 
         [HttpPut("username")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult> ChangeUsername(UserChangeNameDTO username)
+        public async Task<ActionResult> ChangeUsername([FromBody]UserChangeNameDTO username)
         {
             var request = new ChangeUsernameCommand(User.Identity?.Name, username);
             await _mediator.Send(request);
@@ -45,7 +45,7 @@ namespace RestAPI101.WebAPI.Controllers
         [HttpPost("password")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> ChangePassword(UserChangePasswordDTO password)
+        public async Task<ActionResult> ChangePassword([FromBody]UserChangePasswordDTO password)
         {
             var request = new ChangePasswordCommand(User.Identity?.Name, password);
             var response = await _mediator.Send(request);

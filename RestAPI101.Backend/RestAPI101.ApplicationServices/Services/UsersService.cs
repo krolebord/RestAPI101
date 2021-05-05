@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using OneOf;
-using RestAPI101.Domain.DTOs.User;
 using RestAPI101.Domain.Entities;
 using RestAPI101.Domain.ServiceResponses;
 using RestAPI101.Domain.Services;
@@ -17,7 +16,7 @@ namespace RestAPI101.ApplicationServices.Services
             this._usersRepository = usersRepository;
         }
 
-        public async Task<OneOf<User, InvalidCredentials>> Login(UserLoginDTO userLogin)
+        public async Task<OneOf<User, InvalidCredentials>> Login(LoginCredentials userLogin)
         {
             var user = await _usersRepository.GetAsync(user => user.Login == userLogin.Login);
 
@@ -28,12 +27,12 @@ namespace RestAPI101.ApplicationServices.Services
             return user;
         }
 
-        public async Task<OneOf<Ok, LoginOccupied>> RegisterUser(UserRegisterDTO userRegister)
+        public async Task<OneOf<Ok, LoginOccupied>> RegisterUser(RegisterCredentials userRegister)
         {
-            var user = userRegister.ToUser();
-
             if (await _usersRepository.LoginOccupied(userRegister.Login))
                 return new LoginOccupied();
+
+            var user = new User(userRegister.Login, userRegister.Password, userRegister.Username);
 
             _usersRepository.Add(user);
             await _usersRepository.SaveChangesAsync();

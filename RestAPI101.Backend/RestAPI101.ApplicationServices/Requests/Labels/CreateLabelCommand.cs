@@ -1,4 +1,4 @@
-﻿using RestAPI101.Domain.DTOs.Label;
+﻿using RestAPI101.ApplicationServices.DTOs.Label;
 
 namespace RestAPI101.ApplicationServices.Requests.Labels
 {

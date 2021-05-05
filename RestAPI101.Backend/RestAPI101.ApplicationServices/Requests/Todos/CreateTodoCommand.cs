@@ -1,4 +1,4 @@
-﻿using RestAPI101.Domain.DTOs.Todo;
+﻿using RestAPI101.ApplicationServices.DTOs.Todo;
 
 namespace RestAPI101.ApplicationServices.Requests.Todos
 {
