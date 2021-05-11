@@ -1,19 +1,27 @@
+import 'package:flutter_restapi101/models/label/label.dart';
 import 'package:flutter_restapi101/models/todo/todo.dart';
 import 'package:flutter_restapi101/models/todo/todoWriteDTO.dart';
 
 abstract class TodosRepository {
   Future<List<Todo>> getTodos();
+
   Future<Todo> getTodo(int id);
+
+  void setFilters(List<Label> filters);
 
   Future<void> createTodo(TodoWriteDTO todo);
 
-  Future<void> updateTodo(int id, TodoWriteDTO todo);
+  Future<void> updateTodo(Todo todo, TodoWriteDTO newTodo);
 
-  Future<void> patchDone(int id, bool done);
+  Future<void> patchDone(Todo todo, bool done);
 
-  Future<void> reorderTodo(int id, int newOrder);
+  Future<void> reorderTodo(Todo todo, int newOrder);
+
+  Future<void> addLabel(Todo todo, Label label);
+
+  Future<void> removeLabel(Todo todo, Label label);
   
-  Future<void> deleteTodo(int id);
+  Future<void> deleteTodo(Todo todo);
 }
 
 abstract class TodosError {

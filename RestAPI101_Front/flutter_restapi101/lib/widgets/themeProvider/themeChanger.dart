@@ -17,21 +17,18 @@ class _ThemeChangerState extends State<ThemeChanger> {
   
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = Theme.of(context);
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: [
         Switch(
-          value: darkMode,
-          onChanged: _changeTheme,
-          inactiveThumbColor: theme.colorScheme.onPrimary,
-          inactiveTrackColor: theme.colorScheme.onPrimary.withOpacity(0.5),
+          value: !darkMode,
+          onChanged: _changeTheme
         ),
         Icon(
           darkMode ? Icons.brightness_3 : Icons.brightness_4, 
-          color: darkMode ? Colors.yellow[200] : Colors.amber[500])
+          color: darkMode ? Colors.yellow[300] : Colors.amber[500]
+        )
       ],
     );
   }
@@ -40,5 +37,6 @@ class _ThemeChangerState extends State<ThemeChanger> {
     darkMode = !darkMode;
     ThemeProvider.of(context, listen: false)
       .setTheme(darkMode ? ThemeData.dark() : ThemeData.light());
+    setState(() {});
   }
 }

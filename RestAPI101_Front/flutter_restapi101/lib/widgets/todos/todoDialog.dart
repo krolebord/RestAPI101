@@ -84,7 +84,7 @@ class _TodoDialogState extends State<TodoDialog> {
 
   String? _validateTitle(String? title) {
     if(title == null || title.isEmpty)
-      return 'Cannot be null';
+      return 'Cannot be empty';
   }
 
   void _handleCancel(BuildContext context) {

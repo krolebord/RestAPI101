@@ -1,23 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_restapi101/cubit/todos_cubit.dart';
-import 'package:flutter_restapi101/widgets/todos/todoList.dart';
-import 'package:flutter_restapi101/widgets/todos/todosStatusBar.dart';
+import 'package:flutter_restapi101/cubit/labels_cubit.dart';
+import 'package:flutter_restapi101/widgets/labels/labelsList.dart';
+import 'package:flutter_restapi101/widgets/labels/labelsStatusBar.dart';
 
-class TodosPage extends StatelessWidget {
-  TodosPage({Key? key}) : super(key :key);
-
+class LabelsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.max,
       children: [
-        TodosStatusBar(),
+        LabelsStatusBar(),
         Expanded(
-          child: BlocBuilder<TodosCubit, TodosState>(
-            buildWhen: (previous, current) => !(previous is TodosLoaded && current is TodosLoading) && !(current is TodosUpdatingErrorState),
+          child: BlocBuilder<LabelsCubit, LabelsState>(
+            buildWhen: (previous, current) => !(previous is LabelsLoaded && current is LabelsLoading) && !(current is LabelsUpdatingErrorState),
             builder: (context, state) {
-              if(state is TodosLoading) {
+              if(state is LabelsLoading) {
                 return Center(
                   child: SizedBox(
                     width: 80,
@@ -27,24 +25,24 @@ class TodosPage extends StatelessWidget {
                 );
               }
 
-              if(state is TodosLoaded) {
-                if(state.todos.isNotEmpty)
-                  return TodoList(todos: state.todos);
+              if(state is LabelsLoaded) {
+                if(state.labels.isNotEmpty)
+                  return LabelsList(labels: state.labels);
                 else
-                  return Center(child: Text('No todos yet\n\n\nTry adding one'));
+                  return Center(child: Text('No labels yet\n\n\nTry adding one'));
               }
 
-              if(state is TodosLoadingErrorState) {
+              if(state is LabelsLoadingErrorState) {
                 return Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text('Couldn\'t load todos'),
+                      Text('Couldn\'t load labels'),
                       Text(state.message),
                       IconButton(
                         icon: Icon(Icons.refresh), 
-                        onPressed: () => context.read<TodosCubit>().fetchTodos(),
+                        onPressed: () => context.read<LabelsCubit>().fetchLabels(),
                       )
                     ],
                   ),

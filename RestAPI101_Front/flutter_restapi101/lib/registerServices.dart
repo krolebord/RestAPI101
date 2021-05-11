@@ -11,5 +11,6 @@ void registerServices() {
 
   services.registerAuthenticatedClient();
 
+  services.registerLabelsRepository();
   services.registerTodosRepository();
 }

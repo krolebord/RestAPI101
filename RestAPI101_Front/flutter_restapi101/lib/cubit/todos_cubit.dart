@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_restapi101/models/label/label.dart';
 import 'package:flutter_restapi101/models/todo/todo.dart';
 import 'package:flutter_restapi101/models/todo/todoWriteDTO.dart';
 import 'package:flutter_restapi101/services/todos/todosRepository.dart';
@@ -14,10 +15,10 @@ class TodosCubit extends Cubit<TodosState> {
   TodosCubit() :
     _repository = GetIt.instance.get<TodosRepository>(), 
     super(TodosLoading()) {
-      updateTodos();
+      fetchTodos();
     }
 
-  Future<void> updateTodos() async {
+  Future<void> fetchTodos() async {
     emit(TodosLoading());
 
     try {
@@ -29,20 +30,29 @@ class TodosCubit extends Cubit<TodosState> {
     }
   }
 
+  void setFilters(List<Label> filters) =>
+      _repository.setFilters(filters);
+
   void createTodo(TodoWriteDTO todo) => 
     _handleUpdateAction(_repository.createTodo(todo)); 
 
-  void patchDone(int id, bool done) =>
-    _handleUpdateAction(_repository.patchDone(id, done));
+  void patchDone(Todo todo, bool done) =>
+    _handleUpdateAction(_repository.patchDone(todo, done));
 
-  void updateTodo(int id, TodoWriteDTO todo) =>
-    _handleUpdateAction(_repository.updateTodo(id, todo));
+  void updateTodo(Todo todo, TodoWriteDTO newTodo) =>
+    _handleUpdateAction(_repository.updateTodo(todo, newTodo));
 
-  void reorderTodo(int id, int newOrder) =>
-    _handleUpdateAction(_repository.reorderTodo(id, newOrder));
-  
-  void deleteTodo(int id) =>
-    _handleUpdateAction(_repository.deleteTodo(id));
+  void reorderTodo(Todo todo, int newOrder) =>
+    _handleUpdateAction(_repository.reorderTodo(todo, newOrder));
+
+  void addLabel(Todo todo, Label label) =>
+      _handleUpdateAction(_repository.addLabel(todo, label));
+
+  void removeLabel(Todo todo, Label label) =>
+      _handleUpdateAction(_repository.removeLabel(todo, label));
+
+  void deleteTodo(Todo todo) =>
+    _handleUpdateAction(_repository.deleteTodo(todo));
 
   void _handleUpdateAction(Future<void> action) async {
     emit(TodosLoading());
@@ -54,6 +64,6 @@ class TodosCubit extends Cubit<TodosState> {
       emit(TodosUpdatingErrorState(message: e.errorMessage));
     }
 
-    await updateTodos();
+    await fetchTodos();
   }
 }

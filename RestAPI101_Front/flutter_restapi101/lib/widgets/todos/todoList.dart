@@ -12,19 +12,20 @@ class TodoList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ReorderableListView.builder(
+      buildDefaultDragHandles: false,
       padding: const EdgeInsets.only(bottom: 78),
       itemCount: todos.length ,
       onReorder: (oldIndex, newIndex) => _handleReorder(context, oldIndex, newIndex),
       itemBuilder: (context, index) {
         var todo = todos[index];
-        return TodoTile(todo: todo, key: ValueKey(todo.id));
+        return TodoTile(index: index, todo: todo, key: ValueKey(todo.id));
       }
     );
   }
 
   void _handleReorder(BuildContext context, int oldIndex, int newIndex) {
     var todo = todos.removeAt(oldIndex);
-    context.read<TodosCubit>().reorderTodo(todo.id, newIndex);
+    context.read<TodosCubit>().reorderTodo(todo, newIndex);
     
     if(oldIndex < newIndex) newIndex--;
     todos.insert(newIndex, todo);

@@ -60,7 +60,7 @@ class UserServiceImplementation with AuthenticatedServiceMixin implements UserSe
   Future<void> deleteUser() async {
     var response = await sendRequest(ApiRequests.deleteUser());
 
-    if(response.statusCode != HttpStatus.ok)
+    if(response.statusCode != HttpStatus.noContent)
       throw UserServiceError(message: 'Couldn\'t delete account');
   }
 }

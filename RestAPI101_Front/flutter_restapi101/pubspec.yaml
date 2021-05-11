@@ -23,11 +23,12 @@ dependencies:
 
   provider: ^5.0.0
   flutter_bloc: ^7.0.0
-  get_it: ^6.0.0
+  get_it: ^7.0.0
 
   vrouter: ^1.1.0+20
 
   animations: ^2.0.0
+  expandable: ^5.0.1
 
 
 dev_dependencies:

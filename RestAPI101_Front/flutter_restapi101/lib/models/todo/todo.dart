@@ -8,10 +8,19 @@ part 'todo.g.dart';
 @JsonSerializable()
 class Todo extends Equatable {
   final int id;
+
   @JsonKey(defaultValue: 0)
   final int order;
+
   final bool done;
+
   final String title;
+
+  @JsonKey(
+    name: 'labels',
+    defaultValue: []
+  )
+  final List<int> labelIds;
 
   @JsonKey(defaultValue:  '')
   final String description;
@@ -21,7 +30,8 @@ class Todo extends Equatable {
     required this.order,
     required this.done,
     required this.title,
-    required this.description
+    required this.description,
+    required this.labelIds
   });
 
   factory Todo.fromJson(Map<String, dynamic> json) => _$TodoFromJson(json);

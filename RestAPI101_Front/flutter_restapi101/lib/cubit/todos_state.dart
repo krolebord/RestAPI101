@@ -3,7 +3,7 @@ part of 'todos_cubit.dart';
 @immutable
 abstract class TodosState extends Equatable {
   @override
-  List<Object?> get props => [];
+  List<Object> get props => [];
 }
 
 class TodosLoading extends TodosState {}
@@ -14,7 +14,7 @@ abstract class TodosErrorState extends TodosState {
   TodosErrorState({required this.message});
 
   @override
-  List<Object?> get props => [message];
+  List<Object> get props => [message];
 }
 
 class TodosUpdatingErrorState extends TodosErrorState {
@@ -31,5 +31,5 @@ class TodosLoaded extends TodosState {
   TodosLoaded({required this.todos});
 
   @override
-  List<Object?> get props => [todos];
+  List<Object> get props => [todos];
 }

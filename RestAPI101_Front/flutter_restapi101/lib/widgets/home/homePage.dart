@@ -1,35 +1,42 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_restapi101/widgets/home/adaptiveLayout.dart';
-import 'package:flutter_restapi101/widgets/home/appTab.dart';
+import 'package:flutter_restapi101/widgets/common/adaptiveLayout.dart';
+import 'package:flutter_restapi101/widgets/common/appTab.dart';
+import 'package:flutter_restapi101/widgets/labels/labelsFAB.dart';
+import 'package:flutter_restapi101/widgets/labels/labelsPage.dart';
 import 'package:flutter_restapi101/widgets/todos/todosFAB.dart';
 import 'package:flutter_restapi101/widgets/todos/todosPage.dart';
 
 class HomePage extends StatefulWidget {
-  final List<AppTab> tabs;
-
-  HomePage() : 
-    tabs = [
-      AppTab(
-        tabIcon: Icons.list_alt, 
-        tabText: "Todos", 
+  final List<AppTab> tabs = [
+    AppTab(
+        tabIcon: Icons.label,
+        tabText: "Labels",
+        page: LabelsPage(),
+        floatingActionButton: LabelsFAB()
+    ),
+    AppTab(
+        tabIcon: Icons.list_alt,
+        tabText: "Todos",
         page: TodosPage(),
         floatingActionButton: TodosFAB()
-      ),
-      AppTab(
-        tabIcon: Icons.sticky_note_2, 
-        tabText: "Notes", 
+    ),
+    AppTab(
+        tabIcon: Icons.sticky_note_2,
+        tabText: "Notes",
         page: Center(child: Text('Work in progress')),
         floatingActionButton: FloatingActionButton(
           onPressed: () {},
           child: Icon(Icons.note_add),
         )
-      ),
-      AppTab(
-        tabIcon: Icons.settings_ethernet, 
-        tabText: "Commands", 
-        page: Center(child: Text('Work in progress')),
-      )
-    ];
+    ),
+    AppTab(
+      tabIcon: Icons.settings_ethernet,
+      tabText: "Commands",
+      page: Center(child: Text('Work in progress')),
+    )
+  ];
+
+  HomePage({Key? key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -66,20 +73,11 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
           elevation: 2,
           color: Theme.of(context).colorScheme.surface,
           child: ListView(
-            children: List.generate(
-              widget.tabs.length, 
-              (index) {
-                var tab = widget.tabs[index];
-                return ListTile(
-                  leading: Icon(tab.tabIcon),
-                  title: Text(tab.tabText),
-                  selected: index == _tabController.index,
-                  onTap: () => _tabController.animateTo(index),
-                );
-              },
-              growable: false
-            ),
-          ),
+            children: [ 
+              for(var i = 0; i < widget.tabs.length; i++) 
+                _buildLeftBarTab(i),
+            ]
+          )
         ),
       ),
       rightChild: TabBarView(
@@ -88,6 +86,16 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         children: widget.tabs.map((tab) => tab.page).toList(growable: false),
       ),
       floatingActionButton: widget.tabs[_tabController.index].floatingActionButton,
+    );
+  }
+
+  Widget _buildLeftBarTab(int index) {
+    var tab = widget.tabs[index];
+    return ListTile(
+      leading: Icon(tab.tabIcon),
+      title: Text(tab.tabText),
+      selected: index == _tabController.index,
+      onTap: () => _tabController.animateTo(index),
     );
   }
 }

@@ -98,7 +98,7 @@ class RestAPIApp extends StatelessWidget {
     return [
       VWidget(
         path: AppRoutes.homeRoute,
-        widget: HomePage()
+        widget: HomePage(key: ValueKey('Home'))
       ),
       VWidget(
         path: AppRoutes.accountRoute,
