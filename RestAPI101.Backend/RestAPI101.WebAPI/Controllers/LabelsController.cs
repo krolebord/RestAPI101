@@ -37,7 +37,7 @@ namespace RestAPI101.WebAPI.Controllers
             return response.Any() ? Ok(response) : NoContent();
         }
 
-        [HttpGet("{id:int}")]
+        [HttpGet("{id:int}", Name = nameof(GetLabelById))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<LabelReadDTO>> GetLabelById([FromRoute]int id)

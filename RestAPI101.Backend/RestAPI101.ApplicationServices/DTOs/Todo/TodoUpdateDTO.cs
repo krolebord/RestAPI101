@@ -5,7 +5,9 @@ namespace RestAPI101.ApplicationServices.DTOs.Todo
     public class TodoUpdateDTO
     {
         public string Title { get; set; }
+
         public string Description { get; set; }
+
         public bool Done { get; set; }
 
         public TodoUpdateDTO(string title, string description, bool done)

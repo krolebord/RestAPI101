@@ -27,6 +27,6 @@ namespace RestAPI101.ApplicationServices.DTOs.Todo
     {
         public static TodoReadDTO ToReadDTO(this Domain.Entities.Todo todo) =>
             new TodoReadDTO(todo.Id, todo.Order, todo.Done, todo.Title, todo.Description,
-                todo.Labels.Select(label => label.Id).ToList());
+                todo.Labels.Select(label => label.Id).OrderBy(id => id).ToList());
     }
 }

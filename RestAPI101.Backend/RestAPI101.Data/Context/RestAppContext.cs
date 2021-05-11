@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using RestAPI101.Data.EntityConfigurations;
 using RestAPI101.Domain.Entities;
@@ -27,7 +26,7 @@ namespace RestAPI101.Data.Context
                 _configuration.GetConnectionString("PostgresConnection"),
                 options => options.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)
             );
-            optionsBuilder.LogTo(Console.WriteLine, new[] {"Microsoft.EntityFrameworkCore.Database.Command"});
+            // optionsBuilder.LogTo(Console.WriteLine, new[] {"Microsoft.EntityFrameworkCore.Database.Command"});
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

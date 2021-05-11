@@ -32,6 +32,9 @@ namespace RestAPI101.ApplicationServices.Handlers.Todos
             if (todo == null)
                 return new NotFound();
 
+            if (todo.Labels.Any(label => label.Id == request.LabelId))
+                return new Ok();
+
             var label = await _labelsRepository
                 .ReadAsync(label => label.Id == request.LabelId && label.UserLogin == request.UserLogin);
 

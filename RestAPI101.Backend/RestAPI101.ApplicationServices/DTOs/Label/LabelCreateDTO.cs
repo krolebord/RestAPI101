@@ -6,9 +6,9 @@ namespace RestAPI101.ApplicationServices.DTOs.Label
     {
         public string Name { get; }
         public string? Description { get; }
-        public int? Color { get; }
+        public uint? Color { get; }
 
-        public LabelCreateDTO(string name, string? description = null, int? color = null)
+        public LabelCreateDTO(string name, string? description = null, uint? color = null)
         {
             Name = name;
             Description = description;

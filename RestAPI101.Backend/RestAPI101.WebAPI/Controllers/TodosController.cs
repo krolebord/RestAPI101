@@ -142,7 +142,7 @@ namespace RestAPI101.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult> RemoveLabel([FromRoute]int id, [FromRoute]int labelId)
         {
-            var request = new AddLabelTodoCommand(User.Identity?.Name, id, labelId);
+            var request = new RemoveLabelTodoCommand(User.Identity?.Name, id, labelId);
             var response = await _mediator.Send(request);
 
             return response.Match<ActionResult>(

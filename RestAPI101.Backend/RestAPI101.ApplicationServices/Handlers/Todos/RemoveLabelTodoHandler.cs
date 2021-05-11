@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -38,10 +40,10 @@ namespace RestAPI101.ApplicationServices.Handlers.Todos
             if (label == null)
                 return new NotFound();
 
-            if (!todo.Labels.Contains(label))
+            if (todo.Labels.All(x => x.Id != label.Id))
                 return new Ok();
 
-            todo.Labels.Remove(label);
+            Console.WriteLine(todo.Labels.RemoveWhere(x => x.Id == label.Id));
 
             await _todosRepository.SaveChangesAsync();
 

@@ -5,7 +5,9 @@ namespace RestAPI101.ApplicationServices.DTOs.Todo
     public class TodoCreateDTO
     {
         public string Title { get; }
+
         public string Description { get; }
+
         public bool Done { get; }
 
         public TodoCreateDTO(string title, string description, bool done = false)

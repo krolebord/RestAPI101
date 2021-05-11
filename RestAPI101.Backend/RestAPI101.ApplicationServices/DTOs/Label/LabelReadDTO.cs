@@ -5,9 +5,9 @@
         public int Id { get; }
         public string Name { get; }
         public string Description { get; }
-        public int? Color { get; }
+        public uint? Color { get; }
 
-        public LabelReadDTO(int id, string name, string description, int? color)
+        public LabelReadDTO(int id, string name, string description, uint? color)
         {
             Id = id;
             Name = name;
