@@ -4,18 +4,44 @@ import 'package:flutter_restapi101/cubit/auth_cubit.dart';
 import 'package:flutter_restapi101/models/auth/authRegisterCredentials.dart';
 import 'package:flutter_restapi101/widgets/authWidgets/authFormField.dart';
 
-// TODO Convert to Stateful
-class RegisterForm extends StatelessWidget {
-  final _formKey = GlobalKey<FormState>();
+class RegisterForm extends StatefulWidget {
+  final void Function() onLogin;
 
-  final _usernameController = TextEditingController();
-  final _loginController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
+  RegisterForm({required this.onLogin, Key? key}) : super(key: key);
 
-  final void Function() switchToLogin;
+  @override
+  _RegisterFormState createState() => _RegisterFormState();
+}
 
-  RegisterForm({required this.switchToLogin, Key? key}) : super(key: key);
+class _RegisterFormState extends State<RegisterForm> {
+  late final GlobalKey<FormState> _formKey;
+
+  late final TextEditingController _usernameController;
+  late final TextEditingController _loginController;
+  late final TextEditingController _passwordController;
+  late final TextEditingController _confirmPasswordController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _formKey = GlobalKey<FormState>();
+
+    _usernameController = TextEditingController();
+    _loginController = TextEditingController();
+    _passwordController = TextEditingController();
+    _confirmPasswordController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _usernameController.dispose();
+    _loginController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +63,7 @@ class RegisterForm extends StatelessWidget {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      'Register', 
+                      'Register',
                       style: TextStyle(fontSize: 22, color: theme.accentColor)
                     ),
                   ),
@@ -75,7 +101,7 @@ class RegisterForm extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       TextButton(
-                        onPressed: switchToLogin,
+                        onPressed: widget.onLogin,
                         child: Text('Log In')
                       ),
                       SizedBox(width: 8),

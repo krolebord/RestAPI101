@@ -18,8 +18,8 @@ class _SignedOutState extends State<SignedOut> {
   void initState() {
     super.initState();
     
-    _loginForm = LoginForm(switchToRegister: _switchToRegister);
-    _registerForm = RegisterForm(switchToLogin: _switchToLogin);
+    _loginForm = LoginForm(onRegister: _switchToRegister);
+    _registerForm = RegisterForm(onLogin: _switchToLogin);
 
     _currentForm = _loginForm;
   }

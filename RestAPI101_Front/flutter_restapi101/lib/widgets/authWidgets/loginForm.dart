@@ -4,16 +4,38 @@ import 'package:flutter_restapi101/cubit/auth_cubit.dart';
 import 'package:flutter_restapi101/models/auth/authCredentials.dart';
 import 'package:flutter_restapi101/widgets/authWidgets/authFormField.dart';
 
-// TODO Convert to Stateful
-class LoginForm extends StatelessWidget {
-  final _formKey = GlobalKey<FormState>();
+class LoginForm extends StatefulWidget {
+  final void Function() onRegister;
 
-  final _loginController = TextEditingController();
-  final _passwordController = TextEditingController();
+  LoginForm({required this.onRegister, Key? key}) : super(key: key);
 
-  final void Function() switchToRegister;
+  @override
+  _LoginFormState createState() => _LoginFormState();
+}
 
-  LoginForm({required this.switchToRegister, Key? key}) : super(key: key);
+class _LoginFormState extends State<LoginForm> {
+  late final GlobalKey<FormState> _formKey;
+
+  late final TextEditingController _loginController;
+  late final TextEditingController _passwordController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _formKey = GlobalKey<FormState>();
+
+    _loginController = TextEditingController();
+    _passwordController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _loginController.dispose();
+    _passwordController.dispose();
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +57,7 @@ class LoginForm extends StatelessWidget {
                   Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      'Log In', 
+                      'Log In',
                       style: TextStyle(fontSize: 22, color: theme.accentColor)
                     ),
                   ),
@@ -62,7 +84,7 @@ class LoginForm extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       TextButton(
-                        onPressed: switchToRegister,
+                        onPressed: widget.onRegister,
                         child: Text('Register')
                       ),
                       SizedBox(width: 8),
@@ -95,7 +117,7 @@ class LoginForm extends StatelessWidget {
     if(!_formKey.currentState!.validate()) return;
 
     var credentials = AuthCredentials(
-      login: _loginController.text, 
+      login: _loginController.text,
       password: _passwordController.text
     );
 
