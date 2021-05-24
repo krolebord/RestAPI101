@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using RestAPI101.ApplicationServices.DTOs.Todo;
 using RestAPI101.ApplicationServices.Requests.Todos;
-using RestAPI101.Domain.Enums;
 using RestAPI101.WebAPI.Filters;
 
 namespace RestAPI101.WebAPI.Controllers
@@ -31,9 +30,9 @@ namespace RestAPI101.WebAPI.Controllers
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public async Task<ActionResult<IEnumerable<TodoReadDTO>>> GetTodos([FromQuery]int[]? labels = null, [FromQuery]TodoFilterMode mode = TodoFilterMode.Or)
+        public async Task<ActionResult<IEnumerable<TodoReadDTO>>> GetFilteredTodos([FromQuery]TodoFilterDTO filter)
         {
-            var request = new GetAllTodosQuery(User.Identity?.Name, labels?.ToHashSet() ?? new HashSet<int>(), mode);
+            var request = new GetFilteredTodosQuery(User.Identity?.Name, filter ?? new TodoFilterDTO());
             var todos = await _mediator.Send(request);
 
             return todos.Any() ? Ok(todos) : NoContent();
