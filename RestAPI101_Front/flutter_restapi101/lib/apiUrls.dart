@@ -2,54 +2,64 @@ import 'package:flutter_restapi101/httpMethods.dart';
 import 'package:http/http.dart';
 
 class ApiUrls {
-  static const String baseurl = "https://localhost:5001";
-  static const String prefix = "api";
+  static const bool useHttps = false;
+  static const String apiPath = "api";
 
   ApiUrls._();
 
-  // Auth
-  static Uri login() => Uri.parse('$baseurl/$prefix/auth/login');
+  static String get authority {
+    // if(Platform.isAndroid)
+    //   return "10.0.2.2:5001";
 
-  static Uri register() => Uri.parse('$baseurl/$prefix/auth/register');
+    return "localhost:5001";
+  }
+
+  static Uri constructUri(String authority, String path, [Map<String, dynamic>? params]) =>
+    useHttps ? Uri.http(authority, path, params) : Uri.https(authority, path, params);
+
+  // Auth
+  static Uri login() => constructUri(authority, '$apiPath/auth/login');
+
+  static Uri register() => constructUri(authority, '$apiPath/auth/register');
 
   // User
-  static Uri getUser() => Uri.parse('$baseurl/$prefix/user');
+  static Uri getUser() => constructUri(authority, '$apiPath/user');
 
-  static Uri deleteUser() => Uri.parse('$baseurl/$prefix/user');
+  static Uri deleteUser() => constructUri(authority, '$apiPath/user');
 
-  static Uri changeName() => Uri.parse('$baseurl/$prefix/user/username');
+  static Uri changeName() => constructUri(authority, '$apiPath/user/username');
 
-  static Uri changePassword() => Uri.parse('$baseurl/$prefix/user/password');
+  static Uri changePassword() => constructUri(authority, '$apiPath/user/password');
   
   // Labels
-  static Uri getAllLabels() => Uri.parse('$baseurl/$prefix/labels');
+  static Uri getAllLabels() => constructUri(authority, '$apiPath/labels');
 
-  static Uri getSpecifiedLabel(int id) => Uri.parse('$baseurl/$prefix/labels/$id');
+  static Uri getSpecifiedLabel(int id) => constructUri(authority, '$apiPath/labels/$id');
 
-  static Uri createLabel() => Uri.parse('$baseurl/$prefix/labels');
+  static Uri createLabel() => constructUri(authority, '$apiPath/labels');
 
-  static Uri updateLabel(int id) => Uri.parse('$baseurl/$prefix/labels/$id');
+  static Uri updateLabel(int id) => constructUri(authority, '$apiPath/labels/$id');
 
-  static Uri deleteLabel(int id) => Uri.parse('$baseurl/$prefix/labels/$id');
+  static Uri deleteLabel(int id) => constructUri(authority, '$apiPath/labels/$id');
 
   // Todos
-  static Uri getAllTodos() => Uri.parse('$baseurl/$prefix/todos');
+  static Uri getAllTodos({Map<String, dynamic>? params}) => constructUri(authority, '$apiPath/todos', params);
 
-  static Uri getSpecifiedTodo(int id) => Uri.parse('$baseurl/$prefix/todos');
+  static Uri getSpecifiedTodo(int id) => constructUri(authority, '$apiPath/todos');
 
-  static Uri postTodo() => Uri.parse('$baseurl/$prefix/todos');
+  static Uri postTodo() => constructUri(authority, '$apiPath/todos');
 
-  static Uri putTodo(int id) => Uri.parse('$baseurl/$prefix/todos/$id');
+  static Uri putTodo(int id) => constructUri(authority, '$apiPath/todos/$id');
 
-  static Uri patchTodo(int id) => Uri.parse('$baseurl/$prefix/todos/$id');
+  static Uri patchTodo(int id) => constructUri(authority, '$apiPath/todos/$id');
 
-  static Uri reorderTodo(int id, int newOrder) => Uri.parse('$baseurl/$prefix/todos/reorder/$id:$newOrder');
+  static Uri reorderTodo(int id, int newOrder) => constructUri(authority, '$apiPath/todos/reorder/$id:$newOrder');
 
-  static Uri addLabelToTodo(int todoId, int labelId) => Uri.parse('$baseurl/$prefix/todos/label/$todoId:$labelId');
+  static Uri addLabelToTodo(int todoId, int labelId) => constructUri(authority, '$apiPath/todos/label/$todoId:$labelId');
 
-  static Uri removeLabelFromTodo(int todoId, int labelId) => Uri.parse('$baseurl/$prefix/todos/label/$todoId:$labelId');
+  static Uri removeLabelFromTodo(int todoId, int labelId) => constructUri(authority, '$apiPath/todos/label/$todoId:$labelId');
 
-  static Uri deleteTodo(int id) => Uri.parse('$baseurl/$prefix/todos/$id');
+  static Uri deleteTodo(int id) => constructUri(authority, '$apiPath/todos/$id');
 }
 
 class ApiRequests {
@@ -91,8 +101,8 @@ class ApiRequests {
     Request(HttpMethods.delete, ApiUrls.deleteLabel(id));
 
   // Todos
-  static Request getAllTodos() => 
-    Request(HttpMethods.get, ApiUrls.getAllTodos());
+  static Request getAllTodos({Map<String, dynamic>? params}) =>
+    Request(HttpMethods.get, ApiUrls.getAllTodos(params: params));
 
   static Request getSpecifiedTodo(int id) => 
     Request(HttpMethods.get, ApiUrls.getSpecifiedTodo(id));

@@ -1,13 +1,12 @@
 import 'package:flutter_restapi101/models/label/label.dart';
+import 'package:flutter_restapi101/models/todo/todoIncludeMode.dart';
 import 'package:flutter_restapi101/models/todo/todo.dart';
 import 'package:flutter_restapi101/models/todo/todoWriteDTO.dart';
 
 abstract class TodosRepository {
-  Future<List<Todo>> getTodos();
+  Future<List<Todo>> getTodos({TodoIncludeMode includeMode = TodoIncludeMode.All, List<Label>? filterLabels});
 
   Future<Todo> getTodo(int id);
-
-  void setFilters(List<Label> filters);
 
   Future<void> createTodo(TodoWriteDTO todo);
 

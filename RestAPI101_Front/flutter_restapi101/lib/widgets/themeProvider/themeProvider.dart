@@ -10,9 +10,8 @@ class ThemeProvider extends StatelessWidget {
   ) builder;
 
   ThemeProvider({
-    required this.builder, 
-    required ThemeData initialTheme
-  }) : _initialTheme = initialTheme, super();
+    required this.builder
+  }) : _initialTheme = ThemeData.dark(), super();
   
   ThemeProvider.light({
     required this.builder

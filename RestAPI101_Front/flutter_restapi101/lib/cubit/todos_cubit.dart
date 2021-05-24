@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_restapi101/models/label/label.dart';
 import 'package:flutter_restapi101/models/todo/todo.dart';
+import 'package:flutter_restapi101/models/todo/todoIncludeMode.dart';
 import 'package:flutter_restapi101/models/todo/todoWriteDTO.dart';
 import 'package:flutter_restapi101/services/todos/todosRepository.dart';
 import 'package:get_it/get_it.dart';
@@ -12,8 +13,13 @@ part 'todos_state.dart';
 class TodosCubit extends Cubit<TodosState> {
   final TodosRepository _repository;
 
+  TodoIncludeMode _includeMode;
+  List<Label> _labelFilters;
+
   TodosCubit() :
-    _repository = GetIt.instance.get<TodosRepository>(), 
+    _repository = GetIt.instance.get<TodosRepository>(),
+    _includeMode = TodoIncludeMode.All,
+    _labelFilters = [],
     super(TodosLoading()) {
       fetchTodos();
     }
@@ -22,7 +28,10 @@ class TodosCubit extends Cubit<TodosState> {
     emit(TodosLoading());
 
     try {
-      var todos = await _repository.getTodos();
+      var todos = await _repository.getTodos(
+        includeMode: _includeMode,
+        filterLabels: _labelFilters
+      );
       emit(TodosLoaded(todos: todos));
     }
     on TodosLoadingError catch(e) {
@@ -30,8 +39,9 @@ class TodosCubit extends Cubit<TodosState> {
     }
   }
 
-  void setFilters(List<Label> filters) =>
-      _repository.setFilters(filters);
+  void setIncludeMode(TodoIncludeMode includeMode) => _includeMode = includeMode;
+
+  void setFilters(List<Label> filters) => _labelFilters = filters;
 
   void createTodo(TodoWriteDTO todo) => 
     _handleUpdateAction(_repository.createTodo(todo)); 

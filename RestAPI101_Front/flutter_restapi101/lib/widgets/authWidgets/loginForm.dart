@@ -58,7 +58,7 @@ class _LoginFormState extends State<LoginForm> {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       'Log In',
-                      style: TextStyle(fontSize: 22, color: theme.accentColor)
+                      style: TextStyle(fontSize: 22, color: theme.buttonColor)
                     ),
                   ),
                   SizedBox(height: 12),

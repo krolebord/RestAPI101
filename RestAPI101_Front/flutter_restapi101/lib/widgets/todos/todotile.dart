@@ -99,7 +99,10 @@ class _TodoTileState extends State<TodoTile> {
   }
 
   Widget _buildLeading() {
+    var theme = Theme.of(context);
     return Checkbox(
+      activeColor: theme.buttonColor,
+      checkColor: theme.colorScheme.onSecondary,
       onChanged: _handleChangedDone,
       value: done,
     );

@@ -64,7 +64,7 @@ class _RegisterFormState extends State<RegisterForm> {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       'Register',
-                      style: TextStyle(fontSize: 22, color: theme.accentColor)
+                      style: TextStyle(fontSize: 22, color: theme.buttonColor)
                     ),
                   ),
                   SizedBox(height: 12),

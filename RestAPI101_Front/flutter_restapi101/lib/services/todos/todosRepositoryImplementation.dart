@@ -2,34 +2,25 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter_restapi101/apiUrls.dart';
 import 'package:flutter_restapi101/models/label/label.dart';
+import 'package:flutter_restapi101/models/todo/todoIncludeMode.dart';
 import 'package:flutter_restapi101/models/todo/todo.dart';
 import 'package:flutter_restapi101/models/todo/todoWriteDTO.dart';
 import 'package:flutter_restapi101/services/authenticatedServiceMixin.dart';
 import 'package:flutter_restapi101/services/todos/todosRepository.dart';
+import 'package:flutter_restapi101/models/todo/todoFilterDTO.dart';
 import 'package:get_it/get_it.dart';
-import 'package:http/http.dart';
-
-import '../../httpMethods.dart';
 
 class TodosRepositoryImplementation with AuthenticatedServiceMixin implements TodosRepository {
   final GetIt getIt = GetIt.instance;
 
-  final List<Label> filters = [];
-
   @override
-  Future<List<Todo>> getTodos() async {
-    Request request;
+  Future<List<Todo>> getTodos({TodoIncludeMode includeMode = TodoIncludeMode.All, List<Label>? filterLabels}) async {
+    var filter = TodoFilterDTO(
+        includeMode: includeMode,
+        labelIds: filterLabels
+    );
 
-    if(filters.isNotEmpty) {
-      var baseUri = ApiUrls.getAllTodos();
-      var uri = Uri.https(
-        baseUri.authority,
-        baseUri.path,
-        {'labels': filters.map<String>((filter) => filter.id.toString()).toList()}
-      );
-      request = Request(HttpMethods.get, uri);
-    }
-    else request = ApiRequests.getAllTodos();
+    var request = ApiRequests.getAllTodos(params: filter.toJson());
 
     var response = await sendRequest(request);
 
@@ -55,12 +46,6 @@ class TodosRepositoryImplementation with AuthenticatedServiceMixin implements To
       }
       default: throw TodosLoadingError(errorMessage: response.body);
     }
-  }
-
-  @override
-  void setFilters(List<Label> newFilters) {
-    filters.clear();
-    filters.insertAll(0, newFilters);
   }
 
   @override

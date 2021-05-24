@@ -15,28 +15,32 @@ import 'package:vrouter/vrouter.dart';
 class RestAPIApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ThemeProvider(
-      initialTheme: ThemeData.dark(),
-      builder: (context, theme) => VRouter(
-        debugShowCheckedModeBanner: false,
-        title: "RestAPI 101",
-        theme: theme,
-        initialUrl: AppRoutes.homeRoute,
-        routes: [
-          VNester(
-            path: null, 
-            widgetBuilder: _buildAppRoot,
-            nestedRoutes: [
-              _buildSignedOutGuard(),
-              _buildSignedInGuard(),
-              VRouteRedirector(
-                path: ':_(.+)',
-                redirectTo: AppRoutes.homeRoute
-              ),
+    return FutureBuilder(
+      future: GetIt.instance.allReady(),
+      builder: (context, snapshot) {
+        return ThemeProvider(
+          builder: (context, theme) => VRouter(
+            debugShowCheckedModeBanner: false,
+            title: "RestAPI 101",
+            theme: theme,
+            initialUrl: AppRoutes.homeRoute,
+            routes: [
+              VNester(
+                path: null,
+                widgetBuilder: _buildAppRoot,
+                nestedRoutes: [
+                  _buildSignedOutGuard(),
+                  _buildSignedInGuard(),
+                  VRouteRedirector(
+                      path: ':_(.+)',
+                      redirectTo: AppRoutes.homeRoute
+                  ),
+                ]
+              )
             ]
-          ),
-        ]
-      )
+          )
+        );
+      }
     );
   }
 

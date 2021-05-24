@@ -63,7 +63,7 @@ class _LabelDialogState extends State<LabelDialog> {
                   child: Row(
                     children: [
                       Expanded(
-                        flex: 2,
+                        flex: 1,
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: SelectableText.rich(
@@ -81,18 +81,19 @@ class _LabelDialogState extends State<LabelDialog> {
                         ),
                       ),
                       Expanded(
+                        flex: 1,
                         child: Align(
                           alignment: Alignment.centerRight,
-                          child: SizedBox(
-                            width: 120,
-                            child: ElevatedButton(
+                          child: ElevatedButton(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8),
                               child: Text(
                                 'Random',
                                 style: TextStyle(color: ColorUtils.textColorOn(_color)),
                               ),
-                              style: ElevatedButton.styleFrom(primary: _color),
-                              onPressed: generateColor,
                             ),
+                            style: ElevatedButton.styleFrom(primary: _color),
+                            onPressed: generateColor,
                           ),
                         )
                       ),

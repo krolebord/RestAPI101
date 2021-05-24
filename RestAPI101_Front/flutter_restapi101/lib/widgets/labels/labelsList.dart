@@ -14,6 +14,7 @@ class LabelsList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      key: PageStorageKey<String>("LabelsPage"),
       padding: const EdgeInsets.only(bottom: 78),
       itemCount: labels.length,
       itemBuilder: _buildLabelTile

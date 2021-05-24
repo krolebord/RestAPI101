@@ -2,10 +2,9 @@ import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_restapi101/cubit/todos_cubit.dart';
-import 'package:flutter_restapi101/models/label/label.dart';
 import 'package:flutter_restapi101/widgets/common/statusBar.dart';
 import 'package:flutter_restapi101/widgets/common/syncStatus.dart';
-import 'package:flutter_restapi101/widgets/labels/labelFilterBar.dart';
+import 'package:flutter_restapi101/widgets/todos/todoFilterBar.dart';
 
 class TodosStatusBar extends StatelessWidget {
   @override
@@ -13,9 +12,7 @@ class TodosStatusBar extends StatelessWidget {
     return ExpandablePanel(
       header: _TodosMainBar(),
       collapsed: Container(),
-      expanded: LabelFilterBar(
-        onFiltersChanged: (filters) => _handleFiltersChanged(context, filters),
-      ),
+      expanded: TodosFilterBar(),
       theme: ExpandableThemeData(
         hasIcon: false,
         useInkWell: false,
@@ -24,13 +21,6 @@ class TodosStatusBar extends StatelessWidget {
         tapBodyToExpand: false
       ),
     );
-  }
-
-  void _handleFiltersChanged(BuildContext context, List<Label> filters) async {
-    var cubit = context.read<TodosCubit>();
-
-    cubit.setFilters(filters);
-    cubit.fetchTodos();
   }
 }
 
@@ -85,7 +75,9 @@ class _TodosMainBar extends StatelessWidget {
 
   Widget _buildTrailing(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(right: 20),
+      padding: MediaQuery.of(context).orientation == Orientation.landscape
+        ? const EdgeInsets.only(right: 20)
+        : EdgeInsets.zero,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
